@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
+  hashedPassword String
+  fullName       String?
+  orgs           Organization[]
+  userOrgMap     UserOrgMap[]
+  userProjMap    UserProjMap[]
+  userTaskMap    UserTaskMap[]
+}
+
+model Organization {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime     @default(now())
+  roles       OrgRole[]
+  projects    Project[]
+  userMap     UserOrgMap[]
+  owner       User?        @relation(fields: [ownerId], references: [id])
+  ownerId     Int?
+}
+
+model UserOrgMap {
+  id     Int           @id @default(autoincrement())
+  org    Organization? @relation(fields: [orgId], references: [id])
+  orgId  Int?
+  User   User?         @relation(fields: [userId], references: [id])
+  userId Int?
+  role   OrgRole?      @relation(fields: [roleId], references: [id])
+  roleId Int?
+}
+
+model OrgRole {
+  id               Int           @id @default(autoincrement())
+  name             String
+  admin            Boolean
+  canViewAll       Boolean
+  canCreateProject Boolean
+  userMap          UserOrgMap[]
+  org              Organization? @relation(fields: [orgId], references: [id])
+  orgId            Int?
+}
+
+model Project {
+  id          Int           @id @default(autoincrement())
+  title       String
+  description String?
+  tasks       Task[]
+  taskStates  TaskState[]
+  userMap     UserProjMap[]
+  roles       ProjectRole[]
+  org         Organization? @relation(fields: [orgId], references: [id])
+  orgId       Int?
+}
+
+model UserProjMap {
+  id        Int          @id @default(autoincrement())
+  project   Project?     @relation(fields: [projectId], references: [id])
+  projectId Int?
+  user      User?        @relation(fields: [userId], references: [id])
+  userId    Int?
+  role      ProjectRole? @relation(fields: [roleId], references: [id])
+  roleId    Int?
+}
+
+model ProjectRole {
+  id               Int               @id @default(autoincrement())
+  name             String
+  admin            Boolean
+  canEditAllTasks  Boolean
+  canEditAllStates Boolean
+  userProjMap      UserProjMap[]
+  taskPermissions  TaskPermission[]
+  statePermissions StatePermission[]
+  project          Project?          @relation(fields: [projectId], references: [id])
+  projectId        Int?
+}
+
+model TaskPermission {
+  id            Int          @id @default(autoincrement())
+  access        Boolean
+  task          Task?        @relation(fields: [taskId], references: [id])
+  taskId        Int?
+  projectRole   ProjectRole? @relation(fields: [projectRoleId], references: [id])
+  projectRoleId Int?
+}
+
+model StatePermission {
+  id            Int          @id @default(autoincrement())
+  access        Boolean
+  taskState     TaskState?   @relation(fields: [taskStateId], references: [id])
+  taskStateId   Int?
+  projectRole   ProjectRole? @relation(fields: [projectRoleId], references: [id])
+  projectRoleId Int?
+}
+
+model Task {
+  id              Int              @id @default(autoincrement())
+  name            String
+  description     String
+  userTaskMap     UserTaskMap[]
+  taskPermissions TaskPermission[]
+  project         Project?         @relation(fields: [projectId], references: [id])
+  projectId       Int?
+  taskState       TaskState?       @relation(fields: [taskStateId], references: [id])
+  taskStateId     Int?
+}
+
+model TaskState {
+  id               Int               @id @default(autoincrement())
+  name             String
+  complete         Boolean
+  tasks            Task[]
+  statePermissions StatePermission[]
+  project          Project?          @relation(fields: [projectId], references: [id])
+  projectId        Int?
+}
+
+model UserTaskMap {
+  id     Int   @id @default(autoincrement())
+  task   Task? @relation(fields: [taskId], references: [id])
+  taskId Int?
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+}

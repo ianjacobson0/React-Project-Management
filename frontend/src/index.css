@@ -1,0 +1,24 @@
+body {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.spinner-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.spinner {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    color: #42a5f5 !important;
+
+}
