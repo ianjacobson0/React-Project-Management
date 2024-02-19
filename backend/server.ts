@@ -7,12 +7,12 @@ import { resolvers as orgResolvers } from "./graphql/Organization/organizationRe
 import { models as orgModels } from "./graphql/Organization/organizationModels";
 import { resolvers as projectResolvers } from "./graphql/Project/projectResolvers";
 import { models as projectModels } from "./graphql/Project/projectModels";
+import { resolvers as inviteResolvers } from "./graphql/Invite/inviteResolvers";
+import { models as inviteModels } from "./graphql/Invite/inviteModels";
 import jwt from "jsonwebtoken";
 import { getErrorMessage, jwtPayload, verifyRequest } from "./types/types";
 import { bodyParserGraphQL } from "body-parser-graphql";
-import { decode } from "punycode";
 import bodyParser from "body-parser";
-import { check } from "express-validator";
 import cors from "cors";
 import { merge } from "lodash";
 
@@ -21,8 +21,8 @@ const app: express.Application = express();
 const port = 3001;
 
 const schema = makeExecutableSchema({
-    resolvers: merge(userResolvers, orgResolvers, projectResolvers),
-    typeDefs: [userModels, orgModels, projectModels]
+    resolvers: merge(userResolvers, orgResolvers, projectResolvers, inviteResolvers),
+    typeDefs: [userModels, orgModels, projectModels, inviteModels]
 });
 
 const authenticate = async (req: express.Request, res: express.Response, next: express.NextFunction) => {

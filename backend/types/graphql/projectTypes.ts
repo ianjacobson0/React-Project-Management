@@ -6,9 +6,9 @@ export type CreateProjectInput = {
 }
 
 export type CreateTaskInput = {
-    name: string;
-    description: string;
-    projectId: number;
+    name?: string;
+    description?: string;
+    taskStateId: number;
 }
 
 export type CreateProjectRoleInput = {
@@ -38,4 +38,44 @@ export type CreateUserProjMapInput = {
     userId: number;
     roleId: number;
     projectId: number;
+}
+
+export type CreateTaskStateInput = {
+    projectId: number;
+    name: string;
+    complete: boolean;
+}
+
+export type UpdateTaskStateInput = {
+    id: number;
+    name: string;
+    complete: boolean;
+}
+
+export type ChangeTaskStateOrderInput = {
+    id: number;
+    newOrder: number;
+}
+
+export type ChangeTaskOrderInput = {
+    id: number;
+    newOrder: number;
+}
+
+export type ChangeTaskStateInput = {
+    id: number;
+    taskStateId: number;
+}
+
+export type UpdateTaskInput = {
+    id: number;
+    name?: string;
+    description?: string;
+}
+
+export type UpdateProjectInput = {
+    id: number;
+    title: string;
+    description: string;
+    orgId: number;
 }

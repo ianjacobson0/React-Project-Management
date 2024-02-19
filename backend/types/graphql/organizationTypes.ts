@@ -26,3 +26,8 @@ export type UserOrgMappingInput = {
     userId: number;
     orgRoleId: number;
 }
+
+export type JoinInput = {
+    userId: number;
+    joinCode: String;
+}

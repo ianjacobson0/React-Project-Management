@@ -2,10 +2,14 @@ export const models = `
     scalar Date 
 
     type Organization {
-        id: ID!
+        id: Int!
         name: String!
         description: String
         createdAt: Date!
+        joinExpireMinutes: Int
+        joinCreated: Date
+        joinCode: String
+        joinRoleId: Int
         roles: [OrgRole]
         projects: [Project]
         userMap: [UserOrgMap]
@@ -14,7 +18,7 @@ export const models = `
     }
 
     type UserOrgMap {
-        id: ID!
+        id: Int!
         org: Organization
         orgId: Int
         user: User
@@ -24,7 +28,7 @@ export const models = `
     }
 
     type OrgRole {
-        id: ID!
+        id: Int!
         name: String!
         admin: Boolean!
         canViewAll: Boolean!
