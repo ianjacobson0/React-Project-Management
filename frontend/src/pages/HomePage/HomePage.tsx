@@ -1,19 +1,22 @@
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import React, { FormEvent, useEffect, useState } from "react";
-import { CHECK_ORG_BY_USER_ID } from "../../queries/organizationQueries";
-import { Link, useNavigate } from "react-router-dom";
-import { CHECK_PROJ_BY_USER_ID, CREATE_TASK_STATE, DELETE_TASK_STATE, PROJECT_BY_ORG_USER_ID, QUERY_STATE_BY_ID, QUERY_TASK_STATES, UPDATE_TASK_STATE } from "../../queries/projectQueries";
-import { Box, Button, Dialog, InputLabel, Menu, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { FaPlus, FaX } from "react-icons/fa6";
-import TaskState from "./TaskState/TaskState";
-import Column from "./Column/Column";
-import Tasks from "./Tasks/Tasks";
+import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
-import { Organization, Project } from "../../types/graphql-types";
+import { CHECK_ORG_BY_USER_ID } from "../../queries/organizationQueries";
+import { CHECK_PROJ_BY_USER_ID, CREATE_TASK_STATE, PROJECT_BY_ORG_USER_ID, QUERY_TASK_STATES } from "../../queries/projectQueries";
+import { Organization, Project, TaskState } from "../../types/graphql-types";
+import Column from "../../components/Column/Column";
+import Tasks from "../../components/TaskList/TaskList";
+import MainBoard from "../../components/MainBoard/MainBoard";
 
 const HomePage = () => {
     const navigate = useNavigate();
     const userId = sessionStorage.getItem("userId");
+
+    if (!userId) navigate("/login")
+
     const { data: orgData, loading, error } = useQuery(CHECK_ORG_BY_USER_ID, {
         variables: { id: parseInt(userId || "0") },
         fetchPolicy: "network-only"
@@ -22,14 +25,19 @@ const HomePage = () => {
         variables: { id: parseInt(userId || "0") },
         fetchPolicy: "network-only"
     });
-    const [queryTaskStates, { loading: statesLoading }] = useLazyQuery(QUERY_TASK_STATES, { fetchPolicy: "network-only" });
-    const [queryProjectsByOrgId, { loading: projectByOrgLoading }] = useLazyQuery(PROJECT_BY_ORG_USER_ID, { fetchPolicy: "network-only" });
+    const [queryTaskStates, { loading: statesLoading }] = useLazyQuery(QUERY_TASK_STATES, {
+        fetchPolicy: "network-only"
+    });
+    const [queryProjectsByOrgId, { loading: projectByOrgLoading }] = useLazyQuery(PROJECT_BY_ORG_USER_ID, {
+        fetchPolicy: "network-only"
+    });
     const [createTaskState, { loading: createStateLoading }] = useMutation(CREATE_TASK_STATE);
+
     const [orgId, setOrgId] = useState(0);
     const [projectId, setProjectId] = useState(0);
     const [organizations, setOrganizations] = useState<Organization[]>([]);
     const [projects, setProjects] = useState<Project[]>([]);
-    const [taskStates, setTaskStates] = useState<any[]>([]);
+    const [taskStates, setTaskStates] = useState<TaskState[]>([]);
 
     const changeOrg = (id: number) => {
         setOrgId(id);
@@ -163,63 +171,12 @@ const HomePage = () => {
                     organizations={organizations}
                     projects={projects}
                 />
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    flexWrap="nowrap"
-                    justifyContent="start"
-                    alignItems="start"
-                    sx={{
-                        backgroundColor: "#ffffff",
-                        padding: "10px",
-                        borderRadius: "10px",
-                        width: "100%",
-                        boxSizing: "border-box",
-                        height: "calc(100vh - 80px)",
-                        overflowX: "scroll"
-                    }}
-                >
-                    {taskStates.map((o) => {
-                        return (
-                            <Column stateObj={o} key={o.id}>
-                                <TaskState o={o} loadTaskStates={loadTaskStates} />
-                                <Tasks stateId={parseInt(o.id)} />
-                            </Column>
-                        );
-                    })}
-                    {orgId !== 0 && projectId !== 0 &&
-                        <Box
-                            display="flex"
-                            sx={{ height: "95%", width: "200px", borderRadius: "20px", margin: "0", boxSizing: "border-box" }}
-                            flexDirection="column"
-                            flexWrap="nowrap"
-                            justifyContent="start"
-                            alignItems="center"
-                            marginX="10px"
-                        >
-                            <Box
-                                display="flex"
-                                flexDirection="row"
-                                flexWrap="nowrap"
-                                alignItems="center"
-                                justifyContent="center"
-                                sx={{
-                                    backgroundColor: "#E8E8E8",
-                                    height: "150x",
-                                    width: "200px",
-                                    padding: "5px",
-                                    boxSizing: "border-box",
-                                    borderRadius: "0",
-                                    cursor: "pointer",
-                                    boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"
-                                }}
-                                position="relative"
-                                onClick={(e) => createState()}
-                            >
-                                <FaPlus size={15} />
-                            </Box>
-                        </Box>}
-                </Box>
+                <MainBoard
+                    projectId={projectId}
+                    taskStates={taskStates}
+                    loadTaskStates={loadTaskStates}
+                    createState={createState}
+                />
             </Box >
         </>
     );

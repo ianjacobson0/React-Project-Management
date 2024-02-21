@@ -10,3 +10,10 @@ export type Project = {
     description?: string;
     orgId?: number;
 }
+
+export type TaskState = {
+    id: number;
+    name?: string;
+    complete?: boolean;
+    order?: number;
+}

@@ -22,6 +22,20 @@ body {
     --bg-light-color: #ffffff;
     --main-dark-color: #464fb6;
     --main-light-color: #9d86be;
+    --box-dark-color: #E8E8E8;
+    --box-text-color: #6e6e6e;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.red {
+    color: #ff8f8f;
 }
 
 .spinner-container {
@@ -103,4 +117,80 @@ body {
 
 .nav-menu-item:hover {
     color: var(--main-light-color);
+}
+
+.board {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: start;
+    background-color: var(--bg-light-color);
+    border: 1px solid var(--main-light-color);
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    height: calc(100vh - 60px);
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: end;
+    height: 95%;
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+}
+
+.highlight {
+    z-index: 0;
+    background-color: #e8e8e844;
+    top: 0;
+    left: 0;
+    right: 210px;
+    bottom: 0;
+    border-radius: 4px;
+    position: absolute;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    height: 25px;
+    width: 200px;
+    padding: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    transition: box-shadow 0.25s;
+    position: relative;
+}
+
+.divider {
+    z-index: 1;
+    width: 200px;
+    height: 25px;
+}
+
+.state-box {
+    background-color: var(--box-dark-color);
+}
+
+.add-box {
+    cursor: pointer;
+    justify-content: center !important;
+}
+
+.box:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 4px;
+}
+
+.box-text {
+    color: var(--box-text-color);
 }
