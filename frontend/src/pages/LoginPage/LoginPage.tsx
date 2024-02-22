@@ -25,6 +25,11 @@ const LoginPage = () => {
     const [showError, setShowError] = useState(false);
     const [errorText, setErrorText] = useState("");
 
+    useEffect(() => {
+        sessionStorage.removeItem("orgId");
+        sessionStorage.removeItem("projectId");
+    }, [])
+
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         signIn({

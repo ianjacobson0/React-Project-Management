@@ -9,6 +9,10 @@ import CreateOrgPage from '../CreateOrgPage/CreateOrgPage';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import LayoutWithBg from '../../layouts/LayoutWithBg/LayoutWithBg';
 import CreateProjectPage from '../CreateProjectPage/CreateProjectPage';
+import EditProjectPage from '../EditProjectPage/EditProjectPage';
+import EditOrgPage from '../EditOrgPage/EditOrgPage';
+import InviteOrgPage from '../InviteOrgPage/InviteOrgPage';
+import JoinOrgPage from '../JoinOrgPage/JoinOrgPage';
 
 function App() {
   return (
@@ -20,10 +24,14 @@ function App() {
         </Route>
         <Route path="/error" element={<ErrorPage />} />
         <Route element={<PrivateRoutes />}>
-          <Route path="/" element={<HomePage />} />
           <Route element={<LayoutWithBg />}>
+            <Route path="/" element={<HomePage />} />
             <Route path="/createorg" element={<CreateOrgPage />} />
             <Route path="/createproject" element={<CreateProjectPage />} />
+            <Route path="/editproject" element={<EditProjectPage />} />
+            <Route path="/editorganization" element={<EditOrgPage />} />
+            <Route path="/inviteorganization" element={<InviteOrgPage />} />
+            <Route path="/join" element={<JoinOrgPage />} />
           </Route>
         </Route>
       </Routes>

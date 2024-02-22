@@ -1,0 +1,16 @@
+{
+  "name": "reactprojectmanagement",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "backend": "npm start --prefix backend",
+    "frontend": "npm start --prefix frontend",
+    "dev": "concurrently --names \"api,client\" --prefix \"[{name}]\" -c \"blue.bold,green.bold\" \"npm run backend\" \"npm run frontend\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

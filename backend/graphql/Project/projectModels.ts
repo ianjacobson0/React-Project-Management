@@ -1,6 +1,6 @@
 export const models = `
     type Project {
-        id: ID
+        id: Int!
         title: String!
         description: String
         tasks: [Task]
@@ -12,7 +12,7 @@ export const models = `
     }
 
     type UserProjMap {
-        id: ID
+        id: Int!
         project: Project
         projectId: Int
         user: User
@@ -22,7 +22,7 @@ export const models = `
     }
 
     type ProjectRole {
-        id: ID
+        id: Int!
         name: String!
         admin: Boolean!
         canEditAllTasks: Boolean!
@@ -35,7 +35,7 @@ export const models = `
     }
 
     type TaskPermission {
-        id: ID
+        id: Int!
         access: Boolean!
         task: Task
         taskId: Int
@@ -44,7 +44,7 @@ export const models = `
     }
 
     type StatePermission {
-        id: ID
+        id: Int!
         access: Boolean!
         taskState: TaskState
         taskStateId: Int
@@ -53,11 +53,12 @@ export const models = `
     }
 
     type Task {
-        id: ID
-        name: String!
-        description: String!
-        userTaskMap: [UserTaskMap]!
-        taskPermissions: [TaskPermission]!
+        id: Int!
+        name: String
+        description: String
+        order: Int
+        userTaskMap: [UserTaskMap]
+        taskPermissions: [TaskPermission]
         project: Project
         projectId: Int
         taskState: TaskState
@@ -65,9 +66,10 @@ export const models = `
     }
 
     type TaskState {
-        id: ID
-        name: String!
-        complete: Boolean!
+        id: Int!
+        name: String
+        complete: Boolean
+        order: Int
         tasks: [Task]
         statePermissions: [StatePermission]
         project: Project
@@ -75,7 +77,7 @@ export const models = `
     }
 
     type UserTaskMap {
-        id: ID!
+        id: Int!
         task: Task
         taskId: Int
         user: User
@@ -90,9 +92,9 @@ export const models = `
     }
 
     input CreateTaskInput {
-        name: String!
-        description: String!
-        projectId: Int!
+        name: String
+        description: String
+        taskStateId: Int!
     }
 
     input CreateProjectRoleInput {
@@ -101,6 +103,13 @@ export const models = `
         canEditAllTasks: Boolean!
         canEditAllStates: Boolean!
         projectId: Int!
+    }
+
+    input UpdateProjectInput {
+        id: Int!
+        title: String!
+        description: String!
+        orgId: Int!
     }
 
     input UpdateProjectRoleInput {
@@ -112,10 +121,43 @@ export const models = `
         projectId: Int
     }
 
+    input UpdateTaskStateInput {
+        id: Int!
+        name: String
+        complete: Boolean
+    }
+
+    input UpdateTaskInput {
+        id: Int!
+        name: String
+        description: String
+    }
+
+    input ChangeTaskStateOrderInput {
+        id: Int!
+        newOrder: Int!
+    }
+
+    input ChangeTaskOrderInput {
+        id: Int!
+        newOrder: Int!
+    }
+
+    input ChangeTaskStateInput {
+        id: Int!
+        taskStateId: Int!
+    }
+
     input CreateTaskPermissionInput {
         access: Boolean!
         taskId: Int!
         projectRoleId: Int!
+    }
+
+    input CreateTaskStateInput {
+        projectId: Int!
+        name: String!
+        complete: Boolean!
     }
 
     input CreateUserProjMapInput {
@@ -125,9 +167,14 @@ export const models = `
     }
 
     type Query {
+        project(id: Int!): Project
         checkProjectByUserId(id: Int!): [Project]
+        taskStates(projectId: Int!): [TaskState]
+        taskState(id: Int!): TaskState
         projectRolesByProjectId(id: Int!): [ProjectRole]
         projectRole(id: Int!): ProjectRole
+        projectsByOrgIdAndUserId(userId: Int!, orgId: Int!): [Project]
+        tasks(stateId: Int!): [Task]
     }
 
     type Mutation {
@@ -135,8 +182,17 @@ export const models = `
         createTask(input: CreateTaskInput!): Task
         createProjectRole(input: CreateProjectRoleInput!): ProjectRole
         createTaskPermission(input: CreateTaskPermissionInput!): TaskPermission
+        createTaskState(input: CreateTaskStateInput!): TaskState
         createUserProjMap(input: CreateUserProjMapInput!): UserProjMap!
-        deleteProjectRole(id: Int!): ProjectRole
+        updateProject(input: UpdateProjectInput!): Project
         updateProjectRole(input: UpdateProjectRoleInput!): ProjectRole
+        updateTaskState(input: UpdateTaskStateInput!): TaskState
+        updateTask(input: UpdateTaskInput!): Task
+        changeTaskState(input: ChangeTaskStateInput!): Task
+        changeTaskStateOrder(input: ChangeTaskStateOrderInput!): TaskState
+        changeTaskOrder(input: ChangeTaskOrderInput!): Task
+        deleteProjectRole(id: Int!): ProjectRole
+        deleteTaskState(id: Int!): TaskState
+        deleteTask(id: Int!): Task
     }
 `

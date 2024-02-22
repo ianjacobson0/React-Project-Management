@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const InitialStage = ({
     firstTimeUser,
@@ -8,6 +9,7 @@ const InitialStage = ({
         firstTimeUser: boolean,
         setCurrentStage: React.Dispatch<React.SetStateAction<number>>
     }) => {
+    const navigate = useNavigate();
 
     return (
         <>
@@ -24,7 +26,11 @@ const InitialStage = ({
                 marginTop="25px"
             >
                 <Button variant="contained" sx={{ marginRight: "10px" }} onClick={(e) => setCurrentStage(1)}>Create</Button>
-                <Button variant="contained" color="inherit">Join</Button>
+                <Button
+                    variant="contained"
+                    color="inherit"
+                    onClick={(e) => navigate("/join")}
+                >Join</Button>
             </Box>
         </>
     );
