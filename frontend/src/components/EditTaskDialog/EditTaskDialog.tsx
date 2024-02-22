@@ -1,6 +1,6 @@
 import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/client";
 import { Box, Button, Dialog, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { UPDATE_TASK } from "../../queries/taskQueries";
 import Spinner from "../Spinner/Spinner";
 
@@ -32,6 +32,11 @@ const EditTaskDialog = ({ task, open, handleClose, refetch }: Props) => {
             refetch();
         });
     }
+
+    useEffect(() => {
+        setName(task.name);
+        setDescription(task.description);
+    }, [task])
 
     if (updateLoading) {
         return <Spinner />

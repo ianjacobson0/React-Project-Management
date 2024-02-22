@@ -17,3 +17,10 @@ export type TaskState = {
     complete?: boolean;
     order?: number;
 }
+
+export type Task = {
+    id: number;
+    name?: string;
+    description?: string;
+    order?: number;
+}

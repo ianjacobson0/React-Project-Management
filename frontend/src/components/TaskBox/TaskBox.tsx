@@ -1,13 +1,14 @@
 import { ApolloQueryResult, OperationVariables, useApolloClient, useMutation } from "@apollo/client";
-import { Box, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { CHANGE_TASK_ORDER, CHANGE_TASK_STATE, DELETE_TASK } from "../../queries/taskQueries";
-import { FaEye, FaX } from "react-icons/fa6";
-import EditTaskDialog from "../EditTaskDialog/EditTaskDialog";
-import { AiFillEdit } from "react-icons/ai";
-import ViewTaskDialog from "../ViewTaskDialog/ViewTaskDialog";
 import { useDrag, useDrop } from "react-dnd";
+import { AiFillEdit } from "react-icons/ai";
+import { FaEye, FaX } from "react-icons/fa6";
+import { RxCaretDown } from "react-icons/rx";
 import { ItemTypes } from "../../constants/constants";
+import { CHANGE_TASK_ORDER, CHANGE_TASK_STATE, DELETE_TASK } from "../../queries/taskQueries";
+import EditTaskDialog from "../EditTaskDialog/EditTaskDialog";
+import EditableTextTaskTitle from "../EditableTextTaskTitle/EditableTextTaskTitle";
+import ViewTaskDialog from "../ViewTaskDialog/ViewTaskDialog";
 
 type Props = {
     task: any,
@@ -16,12 +17,16 @@ type Props = {
 
 const TaskBox = ({ task, refetch }: Props) => {
     const client = useApolloClient();
-    const ref = useRef();
+    const ref = useRef(null);
     const [deleteTask, { loading: deleteLoading }] = useMutation(DELETE_TASK);
     const [changeTaskOrder, { loading: orderLoading }] = useMutation(CHANGE_TASK_ORDER);
     const [changeTaskState, { loading: changeStateLoading }] = useMutation(CHANGE_TASK_STATE);
+    const [descriptionOpen, setDescriptionOpen] = useState(false);
+    const [showContent, setShowContent] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [viewOpen, setViewOpen] = useState(false);
+    const [overInput, setOverInput] = useState(false);
+
 
     const [{ isDragging }, drag] = useDrag(() => ({
         type: ItemTypes.TASK,
@@ -29,7 +34,11 @@ const TaskBox = ({ task, refetch }: Props) => {
         collect: (monitor) => ({
             item: monitor.getItem(),
             isDragging: !!monitor.isDragging()
-        })
+        }),
+        canDrag: (monitor) => {
+            console.log(overInput);
+            return !overInput;
+        }
     }), [task]);
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -86,6 +95,13 @@ const TaskBox = ({ task, refetch }: Props) => {
         }).then(() => client.reFetchObservableQueries());
     }
 
+    const toggleDesription = () => {
+        setDescriptionOpen(!descriptionOpen);
+        setTimeout(() => {
+            setShowContent(!showContent);
+        }, descriptionOpen ? 0 : 100);
+    }
+
     const handleEditClose = () => {
         setEditOpen(false);
     }
@@ -95,50 +111,60 @@ const TaskBox = ({ task, refetch }: Props) => {
     }
 
     return (
-        <Box
-            ref={ref}
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            flexWrap="nowrap"
-            marginTop="10px"
-            sx={{
-                backgroundColor: "#fcfcfc",
-                height: "150x",
-                width: "200px",
-                padding: "5px",
-                boxSizing: "border-box",
-                borderRadius: "0",
-                boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"
+        <div
+            className="box task-box"
+            style={{
+                height: descriptionOpen ? "200px" : "25px"
             }}
+            ref={ref}
         >
-            <Typography variant="body2" sx={{ height: "1rem" }}>{task?.name}</Typography>
-            <Box
-                display="flex"
-                flexDirection="row"
-                justifyContent="center"
-                alignItems="center"
-                flexWrap="nowrap"
-            >
-                <FaEye
-                    style={{ cursor: "pointer" }}
-                    onClick={(e) => setViewOpen(true)}
+            <div className="box-title" onClick={(e) => toggleDesription()}>
+                <EditableTextTaskTitle
+                    task={task}
+                    setOverInput={setOverInput}
+                    refetch={refetch}
                 />
-                <AiFillEdit
-                    style={{ cursor: "pointer" }}
-                    onClick={(e) => setEditOpen(true)}
-                />
-                <FaX
-                    style={{ cursor: "pointer" }}
+                <RxCaretDown
                     size={15}
-                    color="red"
-                    onClick={(e) => delete_click()}
+                    className="box-text"
+                    style={{ cursor: "pointer" }}
                 />
-            </Box>
+
+            </div>
+            <div
+                className="box-description"
+                style={{
+                    height: descriptionOpen ? "200px" : "0px"
+                }}
+            >
+                <div className="box-content"
+                    style={{ opacity: showContent ? "1.0" : "0.0" }}
+                >
+                    <div className="text-box description-text">
+                        {(task.description !== "" && task.description)
+                            ? task.description : <i>no description</i>}
+                    </div>
+                    <div className="box-actions">
+                        <FaEye
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => setViewOpen(true)}
+                        />
+                        <AiFillEdit
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => setEditOpen(true)}
+                        />
+                        <FaX
+                            style={{ cursor: "pointer" }}
+                            size={15}
+                            color="red"
+                            onClick={(e) => delete_click()}
+                        />
+                    </div>
+                </div>
+            </div>
             <EditTaskDialog open={editOpen} task={task} handleClose={handleEditClose} refetch={refetch} />
             <ViewTaskDialog open={viewOpen} task={task} handleClose={handleViewClose} />
-        </Box >
+        </div >
     );
 }
 

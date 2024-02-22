@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { IsOverInfo } from "../../types/drag-types";
 import { TaskState } from "../../types/graphql-types";
 import StateBox from "../StateBox/StateBox";
 import TaskList from "../TaskList/TaskList";
@@ -10,26 +11,42 @@ type Props = {
 }
 
 const Column = ({ stateObj, loadTaskStates }: Props) => {
-    const [isOver_state, setIsOver_state] = useState(false);
+    const [isOverInfo_state, setIsOverInfo_state] = useState<IsOverInfo | null>(null);
     const [isDragging_state, setIsDragging_state] = useState(false);
+    const [isOrderChanging, setIsOrderChanging] = useState(false);
 
     return (
         <div
             className="column"
-            style={{ display: isDragging_state ? "none" : "flex" }}
+            style={{
+                display: isDragging_state ? "none" : "flex",
+                alignItems: isOverInfo_state?.higherOrder ? "flex-end" : "flex-start"
+            }}
         >
             <div
-                className="highlight"
-                style={{ display: isOver_state ? "block" : "none" }}
+                className="highlight-left"
+                style={{
+                    display: ((isOrderChanging || isOverInfo_state?.isOver) && isOverInfo_state?.higherOrder)
+                        ? "block" : "none"
+                }}
             ></div>
             <StateBox
                 state={stateObj}
                 loadTaskStates={loadTaskStates}
-                setIsOver={setIsOver_state}
+                isOverInfo={isOverInfo_state}
+                setIsOverInfo={setIsOverInfo_state}
                 setIsDragging={setIsDragging_state}
+                setIsChanging={setIsOrderChanging}
             />
             <TaskList stateId={stateObj.id} />
-        </div>
+            <div
+                className="highlight-right"
+                style={{
+                    display: ((isOrderChanging || isOverInfo_state?.isOver) && !isOverInfo_state?.higherOrder)
+                        ? "block" : "none"
+                }}
+            ></div >
+        </div >
     );
 }
 

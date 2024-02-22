@@ -1,8 +1,9 @@
 import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/client";
 import { Box, Button, Dialog, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { UPDATE_TASK } from "../../queries/taskQueries";
 import Spinner from "../Spinner/Spinner";
+import { Task } from "../../types/graphql-types";
 
 type Props = {
     task: any,
@@ -11,6 +12,12 @@ type Props = {
 }
 
 const ViewTaskDialog = ({ task, open, handleClose }: Props) => {
+    const [currentTask, setCurrentTask] = useState<Task>(task);
+
+    useEffect(() => {
+        setCurrentTask(task);
+    }, [task])
+
     return (
         <Dialog
             open={open}
@@ -28,7 +35,7 @@ const ViewTaskDialog = ({ task, open, handleClose }: Props) => {
                 padding="20px"
             >
                 <Typography variant="body2">Name:</Typography>
-                <Typography variant="subtitle1">{task.name || <i>{"unnamed task"}</i>}</Typography>
+                <Typography variant="subtitle1">{currentTask.name || <i>{"unnamed task"}</i>}</Typography>
                 <Typography variant="body2">Description:</Typography>
                 <Box
                     width="400px"
@@ -43,7 +50,7 @@ const ViewTaskDialog = ({ task, open, handleClose }: Props) => {
                         margin="auto"
                         fontSize="small"
                     >
-                        {task.description || <i>{"no description"}</i>}
+                        {currentTask.description || <i>no description</i>}
                     </Typography>
                 </Box>
                 <Button
