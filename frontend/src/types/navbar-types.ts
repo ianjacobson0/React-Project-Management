@@ -17,7 +17,7 @@ export type HomePageState = {
 
 export const navBarInfo: NavBarInfo[] = [
     {
-        title: "Organization",
+        title: "Organization Settings",
         itemInfo: [
             {
                 title: "Create",
@@ -34,7 +34,7 @@ export const navBarInfo: NavBarInfo[] = [
         ]
     },
     {
-        title: "Project",
+        title: "Project Settings",
         itemInfo: [
             {
                 title: "Create",
