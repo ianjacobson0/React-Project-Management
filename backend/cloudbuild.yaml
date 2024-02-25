@@ -6,6 +6,7 @@ steps:
       - "build"
       - "-t"
       - "us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+      - "--build-arg"
       - "DATABASE_URL=${_DATABASE_URL}"
       - "JWT_SECRET=${_JWT_SECRET}"
       - "./backend"
