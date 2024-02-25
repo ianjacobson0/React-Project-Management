@@ -3,3 +3,4 @@ export type InviteInput = {
     orgRoleId: number;
     expireMinutes: number;
 }
+// test
