@@ -34,14 +34,12 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
     const [changeOrder, { loading: orderLoading }] = useMutation(CHANGE_STATE_ORDER);
     const [stateId, setStateId] = useState(0);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [isOrderChanging, setIsOrderChanging] = useState(false);
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.STATE,
         drop: (item) => {
             const obj = item as any;
             const fromId = obj.id;
-            setIsOrderChanging(true);
             if (state.order != null) changeTaskStateOrder(fromId, state.order);
         },
         canDrop: (item: any) => {
@@ -77,12 +75,8 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
     }, [isOver])
 
     useEffect(() => {
-        console.log(isOverInfo?.higherOrder);
-    }, [isOverInfo])
-
-    useEffect(() => {
-        setIsChanging(isOrderChanging)
-    }, [isOrderChanging])
+        setIsChanging(orderLoading)
+    }, [orderLoading])
 
 
     const handleClose = () => {
@@ -111,7 +105,6 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
             }
         }).then(() => {
             loadTaskStates();
-            setIsOrderChanging(false);
         })
     }
 
@@ -124,7 +117,7 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
     }, [isDragging])
     return (
         <div ref={ref} className="row">
-            {((isOver || isOrderChanging) && isOverInfo?.higherOrder)
+            {((isOver || orderLoading) && isOverInfo?.higherOrder)
                 && <div className="divider"></div>}
             <div className="box state-box">
                 <div className="box-title">
@@ -156,7 +149,7 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
                         </Box>}
                 </div>
             </div>
-            {((isOver || isOrderChanging) && !isOverInfo?.higherOrder)
+            {((isOver || orderLoading) && !isOverInfo?.higherOrder)
                 && <div className="divider"></div>}
             <EditStateDialog
                 open={dialogOpen}

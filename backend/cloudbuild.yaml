@@ -1,0 +1,31 @@
+steps:
+  - id: "docker-build"
+    timeout: 200s
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "us-east4-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+      - "."
+  - id: "docker-push"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "us-east4-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+    waitFor:
+      - "docker-build"
+  - id: "deploy-cloud-run"
+    name: "gcr.io/cloud-builders/gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "${_SERVICE_NAME}"
+      - "--image"
+      - "us-east4-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+      - "--region"
+      - "us-east4"
+    waitFor:
+      - "docker-push"
+substitutions:
+  _REPO_NAME: project-management
+  _SERVICE_NAME: backend

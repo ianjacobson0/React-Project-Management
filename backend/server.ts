@@ -61,7 +61,7 @@ const checkToken = async (token: string): Promise<boolean> => {
     }
 }
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors());
 
 app.use('/graphql', bodyParserGraphQL(), authenticate);
 

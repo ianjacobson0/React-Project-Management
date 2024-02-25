@@ -100,19 +100,7 @@ const HomePage = () => {
             }
         })
             .then(({ data }) => {
-                queryTaskStates({
-                    variables: {
-                        projectId: projectId
-                    }
-                })
-                    .then(({ data }) => {
-                        if (data.taskStates) {
-                            setTaskStates(data.taskStates);
-                        }
-                    })
-                    .catch((err) => {
-                        navigate("/error", { state: { errorMessage: err.message } });
-                    })
+                loadTaskStates();
             })
             .catch((err) => {
                 navigate("/error", { state: { errorMessage: err.message } });
@@ -157,8 +145,8 @@ const HomePage = () => {
                 justifyContent="space-between"
                 alignItems="center"
                 sx={{
-                    width: "100%",
-                    height: "100%",
+                    width: "100vw",
+                    height: "100vh",
                     padding: "10px",
                     boxSizing: "border-box"
                 }}
@@ -176,6 +164,7 @@ const HomePage = () => {
                     taskStates={taskStates}
                     loadTaskStates={loadTaskStates}
                     createState={createState}
+                    isLoading={createStateLoading}
                 />
             </Box >
         </>

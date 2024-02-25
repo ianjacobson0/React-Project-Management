@@ -397,7 +397,10 @@ export const resolvers = {
             if (!newTaskState) {
                 return task;
             }
-            const newOrder = Math.max(...newTaskState?.tasks.map(o => o.order)) + 1;
+            let newOrder = 0
+            if (newTaskState.tasks && newTaskState.tasks.length > 0) {
+                newOrder = Math.max(...newTaskState?.tasks.map(o => o.order)) + 1
+            }
             const newTask = await prisma.task.update({
                 where: {
                     id: task.id
