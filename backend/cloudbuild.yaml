@@ -29,6 +29,8 @@ steps:
       - "us-east4"
     waitFor:
       - "docker-push"
+options:
+  logging: CLOUD_LOGGING_ONLY
 substitutions:
   _REPO_NAME: project-management
   _SERVICE_NAME: backend
