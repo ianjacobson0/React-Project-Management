@@ -1,6 +1,6 @@
 import { ApolloCache, ApolloQueryResult, DefaultContext, MutationOptions, OperationVariables, useMutation } from "@apollo/client";
 import { Operation } from "apollo-link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UPDATE_TASK } from "../../queries/taskQueries";
 import { Task, TaskState } from "../../types/graphql-types";
 
@@ -11,6 +11,7 @@ type Props = {
 }
 
 const EditableTextTaskTitle = ({ task, setOverInput, refetch }: Props) => {
+    const inputRef = useRef<HTMLInputElement>(null);
     const [updateTask, { loading }] = useMutation(UPDATE_TASK);
     const [isEditing, setIsEditing] = useState(false);
     const [value, setValue] = useState(task.name);
@@ -35,18 +36,26 @@ const EditableTextTaskTitle = ({ task, setOverInput, refetch }: Props) => {
         });
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === "Enter") {
+            inputRef.current?.blur();
+        }
+    }
+
     useEffect(() => {
         setValue(task.name);
     }, [task])
 
     return (
         <div
+            onKeyDown={handleKeyDown}
             onClick={handleClick}
             className="editable-text"
             onMouseEnter={(e) => setOverInput(true)}
             onMouseLeave={(e) => setOverInput(false)}
         >
             <input
+                ref={inputRef}
                 autoFocus={false}
                 readOnly={!isEditing}
                 value={value}

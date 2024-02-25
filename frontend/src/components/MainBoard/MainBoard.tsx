@@ -8,23 +8,24 @@ type Props = {
     projectId: number,
     taskStates: TaskState[],
     loadTaskStates: () => void,
-    createState: () => void
+    createState: () => void,
+    isLoading: boolean,
 }
 
-const MainBoard = ({ projectId, taskStates, loadTaskStates, createState }: Props) => {
+const MainBoard = ({ projectId, taskStates, loadTaskStates, createState, isLoading }: Props) => {
     return (
         <div className="board">
 
-            {taskStates.map((state) => {
+            {!isLoading && taskStates.map((state, idx) => {
                 return (
                     <Column
                         stateObj={state}
                         loadTaskStates={loadTaskStates}
-                        key={`${state.id}`}
+                        key={`${state.id}-${idx}-${(new Date())}`}
                     />
                 );
             })}
-            {projectId !== 0 && <ColumnAdd createState={createState} />}
+            {!isLoading && projectId !== 0 && <ColumnAdd createState={createState} />}
         </div >
     );
 }

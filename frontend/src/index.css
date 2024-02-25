@@ -44,6 +44,7 @@ body {
 }
 
 .spinner-container {
+    position: absolute;
     width: 100vw;
     height: 100vh;
 }
@@ -144,11 +145,18 @@ body {
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     height: 95%;
     border-radius: 4px;
     margin-right: 10px;
     position: relative;
+}
+
+.hover {
+    position: absolute;
+    width: 105%;
+    height: 100%;
+    background-color: #e8e8e871;
 }
 
 .highlight-left {
@@ -265,8 +273,10 @@ body {
     font-size: 15px;
     border: none;
     text-overflow: ellipsis;
+    cursor: auto;
 }
 
 .editable-text>input:focus {
     outline: none;
+    cursor: text;
 }

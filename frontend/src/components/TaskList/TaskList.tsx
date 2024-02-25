@@ -36,7 +36,7 @@ const TaskList = ({ stateId }: Props) => {
     return (
         <>
             {data.tasks.map((o: any, idx: number) => {
-                return (<TaskBox task={o} refetch={refetch} key={`${o.taskStateId}-${o.id}}`} />);
+                return (<TaskBox task={o} refetch={refetch} key={`${o.taskStateId}-${o.id}-${(new Date()).getTime() + idx}`} />);
             })}
             {!loading &&
                 <div className="box task-box add-box" onClick={(e) => create_click()}>

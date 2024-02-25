@@ -54,7 +54,12 @@ const TaskBox = ({ task, refetch }: Props) => {
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver()
-        })
+        }),
+        canDrop: (item) => {
+            const obj = item as any;
+            const stateId = parseInt(obj.stateId);
+            return stateId === parseInt(task.taskStateId);
+        }
     }), [task]);
 
     useEffect(() => {

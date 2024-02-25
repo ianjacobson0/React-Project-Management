@@ -8,13 +8,13 @@ import { CHECK_ORG_BY_USER_ID } from "../../queries/organizationQueries";
 const EditProjectPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    console.log(location.state.projectId);
     const projectId = parseInt(location.state?.projectId || "0");
     const userId = parseInt(sessionStorage.getItem("userId") || "0");
     const { data, loading, error } = useQuery(QUERY_PROJECT, {
         variables: {
             id: projectId
-        }
+        },
+        fetchPolicy: "network-only"
     });
     const { data: orgData, loading: orgLoading, error: errorOrg } = useQuery(CHECK_ORG_BY_USER_ID, {
         variables: {
@@ -55,7 +55,6 @@ const EditProjectPage = () => {
             }
         })
             .then(() => {
-                sessionStorage.removeItem("projectId");
                 navigate("/");
             })
             .catch((error) => {
