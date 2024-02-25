@@ -26,7 +26,7 @@ steps:
       - "--image"
       - "us-east4-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
       - "--region"
-      - "us-east4"
+      - "us-central1"
     waitFor:
       - "docker-push"
 options:
