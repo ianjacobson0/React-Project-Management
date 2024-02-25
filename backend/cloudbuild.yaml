@@ -5,7 +5,7 @@ steps:
     args:
       - "build"
       - "-t"
-      - "us-east4-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+      - "us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
       - "."
     env:
       - "DATABASE_URL=${_DATABASE_URL}"
@@ -14,7 +14,7 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args:
       - "push"
-      - "us-east4-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+      - "us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
     waitFor:
       - "docker-build"
   - id: "deploy-cloud-run"
@@ -24,7 +24,7 @@ steps:
       - "deploy"
       - "${_SERVICE_NAME}"
       - "--image"
-      - "us-east4-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+      - "us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
       - "--region"
       - "us-central1"
     waitFor:
