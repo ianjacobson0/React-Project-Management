@@ -8,6 +8,8 @@ COPY . .
 
 ENV DATABASE_URL=$DATABASE_URL
 
+RUN npm run env
+
 RUN npm install
 
 RUN npm run build
