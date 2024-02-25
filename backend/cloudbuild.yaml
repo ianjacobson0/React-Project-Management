@@ -6,6 +6,8 @@ steps:
       - "build"
       - "-t"
       - "us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+      - "DATABASE_URL=${_DATABASE_URL}"
+      - "JWT_SECRET=${_JWT_SECRET}"
       - "./backend"
   - id: "docker-push"
     name: "gcr.io/cloud-builders/docker"
@@ -26,9 +28,6 @@ steps:
       - "us-central1"
     waitFor:
       - "docker-push"
-  - env:
-      - "DATABASE_URL=${_DATABASE_URL}"
-      - "JWT_SECRET=${_JWT_SECRET}"
 options:
   logging: CLOUD_LOGGING_ONLY
 substitutions:

@@ -7,8 +7,7 @@
     "start": "nodemon server.ts",
     "build": "tsc",
     "transpile": "babel ./build --out-dir ./build-transpiled",
-    "start-production": "node ./build-transpiled/server.js",
-    "create-env": "printenv > .env"
+    "start-production": "node ./build-transpiled/server.js"
   },
   "author": "",
   "license": "ISC",
