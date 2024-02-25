@@ -7,6 +7,9 @@ steps:
       - "-t"
       - "us-east4-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
       - "."
+    env:
+      - "DATABASE_URL=${_DATABASE_URL}"
+      - "JWT_SECRET=${_JWT_SECRET}"
   - id: "docker-push"
     name: "gcr.io/cloud-builders/docker"
     args:
