@@ -6,7 +6,7 @@ steps:
       - "build"
       - "-t"
       - "us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
-      - "--buildargs"
+      - "--build-args"
       - "DATABASE_URL=${_DATABASE_URL}"
       - "./backend"
   - id: "docker-push"
