@@ -1,5 +1,6 @@
 steps:
   - id: "docker-build"
+    entrypoint: /backend
     timeout: 200s
     name: "gcr.io/cloud-builders/docker"
     args:
