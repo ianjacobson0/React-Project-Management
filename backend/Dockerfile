@@ -8,15 +8,17 @@ COPY . .
 
 ENV DATABASE_URL=$DATABASE_URL
 
+RUN echo "$DATABASE_URL"
+
 RUN npm install
 
 RUN npm run env
 
+RUN npx prisma migrate deploy
+
 RUN npm run build
 
 RUN npm run transpile
-
-RUN npx prisma migrate deploy
 
 EXPOSE 3001
 
