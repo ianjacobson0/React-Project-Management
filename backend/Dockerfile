@@ -6,15 +6,7 @@ WORKDIR /app/pm-backend
 
 COPY . .
 
-ENV DATABASE_URL=$DATABASE_URL
-
-ENV JWT_SECRET=$JWT_SECRET
-
 RUN npm install
-
-RUN npm run create-env
-
-RUN npx prisma migrate deploy
 
 RUN npm run build
 
