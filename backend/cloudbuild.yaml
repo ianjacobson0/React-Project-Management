@@ -1,23 +1,4 @@
 steps:
-  - id: "yarn-install"
-    name: "node:18.17.1"
-    entrypoint: yarn
-    args:
-      - "install"
-  - id: migrate
-    name: "gcr.io/cloud-builders/yarn"
-    entrypoint: sh
-    args:
-      - "-c"
-      - |
-        wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
-        chmod +x cloud_sql_proxy
-        ./cloud_sql_proxy -instances=$$_DB_HOST=tcp:$$_DB_PORT & sleep 3
-        export DATABASE_URL=postgresql://$$_DB_USER:$$_DB_PASS@localhost/$$_DB_NAME?schema=public
-        yarn workspace api run migrate
-    timeout: 1200s
-    waitFor:
-      - "yarn-install"
   - id: "docker-build"
     timeout: 200s
     name: "gcr.io/cloud-builders/docker"
@@ -25,6 +6,8 @@ steps:
       - "build"
       - "-t"
       - "us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_SERVICE_NAME}"
+      - "--buildargs"
+      - "DATABASE_URL=${_DATABASE_URL}"
       - "./backend"
   - id: "docker-push"
     name: "gcr.io/cloud-builders/docker"
