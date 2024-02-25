@@ -14,7 +14,7 @@ RUN npm run build
 
 RUN npm run transpile
 
-RUN npx primsa migrate deploy
+RUN npx prisma migrate deploy
 
 EXPOSE 3001
 
