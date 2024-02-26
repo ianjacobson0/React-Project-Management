@@ -28,7 +28,6 @@ const schema = makeExecutableSchema({
 const authenticate = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const operationName = req.body.operationName;
     const unauthenticatedQueries = ["SignUp", "SignIn"];
-
     if (unauthenticatedQueries.includes(operationName)) {
         next();
     } else {
