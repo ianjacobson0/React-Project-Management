@@ -19,7 +19,7 @@ import { merge } from "lodash";
 const app: express.Application = express();
 
 const port = 3001;
-//etest
+
 const schema = makeExecutableSchema({
     resolvers: merge(userResolvers, orgResolvers, projectResolvers, inviteResolvers),
     typeDefs: [userModels, orgModels, projectModels, inviteModels]
