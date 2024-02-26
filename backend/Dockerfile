@@ -6,7 +6,7 @@ WORKDIR /app/pm-backend
 
 COPY . .
 
-ENV DATABASE_URL="postgres://postgres:JEAPCrL020hvXHb@34.132.27.249:5432/project-management-db"
+ENV DATABASE_URL="$DATABASE_URL"
 
 RUN npm install
 
