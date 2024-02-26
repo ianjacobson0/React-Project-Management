@@ -1,12 +1,16 @@
 FROM node:alpine
 
+ARG DATABASE_URL
+
 RUN mkdir -p /app/pm-backend
 
 WORKDIR /app/pm-backend
 
 COPY . .
 
-ENV DATABASE_URL="$DATABASE_URL"
+ENV DATABASE_URL=$DATABASE_URL
+
+RUN echo $DATABASE_URL
 
 RUN npm install
 
