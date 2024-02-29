@@ -9,12 +9,12 @@ import { Project } from "../../types/graphql-types";
 import NavItemOrg from "../NavItemOrg/NavItemOrg";
 
 type Props = {
-    orgId: number,
-    projectId: number,
+    orgId: number | null,
+    projectId: number | null,
     changeOrg: (id: number) => void,
     changeProject: (id: number) => void,
     organizations: any,
-    projects: Project[]
+    projects: Project[] | null
 }
 
 const NavBar = ({ orgId, projectId, changeOrg, changeProject, organizations, projects }: Props) => {

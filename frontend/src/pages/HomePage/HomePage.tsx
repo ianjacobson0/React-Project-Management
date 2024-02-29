@@ -33,11 +33,12 @@ const HomePage = () => {
     });
     const [createTaskState, { loading: createStateLoading }] = useMutation(CREATE_TASK_STATE);
 
-    const [orgId, setOrgId] = useState(0);
-    const [projectId, setProjectId] = useState(0);
+    const [orgId, setOrgId] = useState<number | null>(null);
+    const [projectId, setProjectId] = useState<number | null>(null);
     const [organizations, setOrganizations] = useState<Organization[]>([]);
-    const [projects, setProjects] = useState<Project[]>([]);
+    const [projects, setProjects] = useState<Project[] | null>(null);
     const [taskStates, setTaskStates] = useState<TaskState[]>([]);
+    const [isNoProjects, setIsNoProjects] = useState(false);
 
     const changeOrg = (id: number) => {
         setOrgId(id);
@@ -47,12 +48,11 @@ const HomePage = () => {
     const changeProject = (id: number) => {
         console.log(typeof (id));
         setProjectId(id);
-        setTaskStates([]);
         sessionStorage.setItem("projectId", id.toString());
     }
 
     const loadProjects = () => {
-        if (orgId != 0) {
+        if (orgId) {
             queryProjectsByOrgId({
                 variables: {
                     userId: parseInt(userId || "0"),
@@ -72,7 +72,7 @@ const HomePage = () => {
     }
 
     const loadTaskStates = () => {
-        if (projectId != 0) {
+        if (projectId) {
             queryTaskStates({
                 variables: {
                     projectId: projectId
@@ -108,12 +108,6 @@ const HomePage = () => {
     }
 
     useEffect(() => {
-        const orgId = parseInt(sessionStorage.getItem("orgId") || "0")
-        setOrgId(orgId);
-        if (orgId) loadProjects()
-    }, []);
-
-    useEffect(() => {
         loadProjects();
     }, [orgId])
 
@@ -122,20 +116,31 @@ const HomePage = () => {
     }, [projectId]);
 
     useEffect(() => {
-        if (error) {
+        if (error)
             navigate("/error", { state: { errorMessage: error.message } });
-        }
-        if (orgData) {
-            if (orgData.organizationByUserId) {
-                if (orgData.organizationByUserId.length == 0) {
-                    navigate("/createorg", { state: { firstTimeUser: true } });
+        if (orgData && orgData.organizationByUserId) {
+            if (orgData.organizationByUserId.length == 0) {
+                navigate("/createorg", { state: { firstTimeUser: true } });
+            } else {
+                setOrganizations(orgData.organizationByUserId);
+                if (sessionStorage.getItem("orgId")) {
+                    setOrgId(parseInt(sessionStorage.getItem("orgId") || "0"));
                 } else {
-                    setOrganizations(orgData.organizationByUserId);
+                    const curr = parseInt(orgData.organizationByUserId[0].id);
+                    setOrgId(curr);
+                    sessionStorage.setItem("orgId", curr.toString());
                 }
+
             }
         }
-    }, [orgData, projectData, error]);
+    }, [orgData, error]);
 
+
+    useEffect(() => {
+        console.log(projects);
+        if (projects !== null)
+            setIsNoProjects(projects.length == 0);
+    }, [projects])
     return (
         <>
             <Box
@@ -164,7 +169,8 @@ const HomePage = () => {
                     taskStates={taskStates}
                     loadTaskStates={loadTaskStates}
                     createState={createState}
-                    isLoading={createStateLoading}
+                    isLoading={createStateLoading || projectByOrgLoading || projectLoading || loading}
+                    isNoProjects={isNoProjects}
                 />
             </Box >
         </>

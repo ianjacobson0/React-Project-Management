@@ -87,6 +87,12 @@ body {
     cursor: pointer;
     position: relative;
     width: max-content;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.nav-item-selector {
+    background-color: rgba(199, 183, 223, 0.623);
 }
 
 .nav-item-title {
@@ -138,6 +144,21 @@ body {
     height: calc(100vh - 60px);
     overflow-x: scroll;
     overflow-y: hidden;
+    position: relative;
+}
+
+.main-board-message {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .column {

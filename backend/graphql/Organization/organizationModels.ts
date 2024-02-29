@@ -44,6 +44,12 @@ export const models = `
         description: String
     }
 
+    input UpdateOrgInput {
+        id: Int!
+        name: String!
+        description: String!
+    }
+
     input CreateOrgRoleInput {
         orgId: Int!
         name: String!
@@ -77,6 +83,7 @@ export const models = `
     type Mutation {
         createOrganization(input: CreateOrgInput!): Organization
         createOrgRole(input: CreateOrgRoleInput!): OrgRole
+        updateOrg(input: UpdateOrgInput!): Organization
         mapUserToOrg(input: UserOrgMappingInput!): UserOrgMap
         updateOrgRole(input: UpdateOrgRoleInput!): OrgRole!
         deleteOrgRole(id: Int!): Boolean!

@@ -4,6 +4,12 @@ export type CreateOrgInput = {
     description?: string;
 }
 
+export type UpdateOrgInput = {
+    id: number;
+    name: string;
+    description?: string;
+}
+
 export type CreateOrgRoleInput = {
     orgId: number;
     name: string;

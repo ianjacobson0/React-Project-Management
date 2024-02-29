@@ -18,7 +18,7 @@ const NavItemOrg = ({ orgs, changeOrg }: Props) => {
     }
     return (
         <div
-            className="nav-item"
+            className="nav-item nav-item-selector"
             onMouseOver={hover}
             onMouseLeave={endHover}
         >

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { API_ENDPOINT } from "../../constants/constants";
 import { CircularProgress } from "@mui/material";
 import Spinner from "../Spinner/Spinner";
 
@@ -10,7 +9,7 @@ const PrivateRoutes = () => {
 
     useEffect(() => {
         if (sessionStorage.getItem("token")) {
-            const url = `${API_ENDPOINT}/verify`;
+            const url = `${process.env.REACT_APP_API_ENDPOINT}/verify`;
             const data = { token: sessionStorage.getItem("token") }
             fetch(url, {
                 method: "POST",

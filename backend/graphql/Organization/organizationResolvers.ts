@@ -1,5 +1,5 @@
 import { Organization, PrismaClient, User } from "@prisma/client"
-import { CreateOrgInput, CreateOrgRoleInput, UpdateOrgRoleInput, UserOrgMappingInput } from "../../types/graphql/organizationTypes";
+import { CreateOrgInput, CreateOrgRoleInput, UpdateOrgInput, UpdateOrgRoleInput, UserOrgMappingInput } from "../../types/graphql/organizationTypes";
 import { GraphQLScalarType, Kind } from "graphql";
 import { addResolversToSchema } from "@graphql-tools/schema";
 
@@ -64,6 +64,16 @@ export const resolvers = {
                 }
             });
             return org;
+        },
+        updateOrg: async (_: any, { input }: { input: UpdateOrgInput }) => {
+            const data = {
+                name: input.name,
+                description: input.description
+            }
+            return await prisma.organization.update({
+                where: { id: input.id },
+                data: data
+            });
         },
         createOrgRole: async (_: any, { input }: { input: CreateOrgRoleInput }) => {
             return await prisma.orgRole.create({ data: input, include: { org: true } });

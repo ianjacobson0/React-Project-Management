@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Project } from "../../types/graphql-types";
 
 type Props = {
-    projects: Project[],
+    projects: Project[] | null,
     changeProject: (id: number) => void
 }
 
@@ -12,8 +12,7 @@ const NavItemProject = ({ projects, changeProject }: Props) => {
 
 
     useEffect(() => {
-        if
-            (projects.length === 0) setColor("#a2bacd");
+        if (projects && projects.length === 0) setColor("#a2bacd");
         else
             setColor("#464fb6");
     }, [projects])
@@ -27,7 +26,7 @@ const NavItemProject = ({ projects, changeProject }: Props) => {
     }
     return (
         <div
-            className="nav-item"
+            className="nav-item nav-item-selector"
             onMouseOver={hover}
             onMouseLeave={endHover}
         >
@@ -35,7 +34,7 @@ const NavItemProject = ({ projects, changeProject }: Props) => {
             <div className="nav-menu-container" style={style}>
                 <div className="nav-menu-hidden"></div>
                 <div className="nav-menu-visible">
-                    {projects.map(project => {
+                    {projects && projects.map(project => {
                         return (
                             <div
                                 key={project.id}

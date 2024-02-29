@@ -11,8 +11,8 @@ export type NavBarInfo = {
     itemInfo: NavItemInfo[];
 }
 export type HomePageState = {
-    orgId?: number;
-    projectId?: number;
+    orgId: number | null;
+    projectId: number | null;
 }
 
 export const navBarInfo: NavBarInfo[] = [

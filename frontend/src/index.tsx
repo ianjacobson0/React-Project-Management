@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './pages/App/App';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, createHttpLink } from '@apollo/client';
-import { GRAPHQL_ENDPOINT } from './constants/constants';
 import { setContext } from 'apollo-link-context';
 
 const httpLink = createHttpLink({
-  uri: GRAPHQL_ENDPOINT
+  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
 })
 
 const authLink = setContext((_, { headers }) => {

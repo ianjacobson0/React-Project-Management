@@ -1,5 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Button, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { useQuery } from "@apollo/client";
+import { QUERY_ORG_BY_ID } from "../../queries/organizationQueries";
+import { useEffect, useState } from "react";
 
 const EditOrgPage = () => {
     const location = useLocation();
@@ -7,6 +10,21 @@ const EditOrgPage = () => {
     const orgId = parseInt(location.state.orgId || "0");
 
     if (orgId === 0) navigate("/");
+
+    const { data, loading: queryIsLoading } = useQuery(QUERY_ORG_BY_ID, {
+        variables: { id: orgId },
+        fetchPolicy: "network-only"
+    });
+
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+
+    useEffect(() => {
+        if (data && data.organization) {
+            setName(data.organization.name);
+            setDescription(data.organization.description);
+        }
+    }, [data])
 
     return (
         <Grid
@@ -25,24 +43,40 @@ const EditOrgPage = () => {
                 }}
             >
                 <Box
-                    display="flex"
-                    justifyContent="space-between"
+                    component="form"
+                    sx={{ marginBottom: "10px" }}
                 >
+                    <InputLabel>Name:</InputLabel>
+                    <TextField
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        size="small"
+                    />
+                    <InputLabel>Description:</InputLabel>
+                    <TextField
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        size="small"
+                    />
+                </Box>
+                <div className="row">
+                    <Button
+                        variant="contained"
+                        color="inherit"
+                        onClick={(e) => navigate("/")}
+                    >
+                        Back
+                    </Button>
                     <Button
                         onClick={(e) => navigate("/inviteorganization", {
                             state: {
                                 orgId: orgId
                             }
                         })}
+                        variant="contained"
+                        sx={{ marginLeft: "10px" }}
                     >Invite</Button>
-                </Box>
-                <Button
-                    variant="contained"
-                    color="inherit"
-                    onClick={(e) => navigate("/")}
-                >
-                    Back
-                </Button>
+                </div>
             </Box>
         </Grid>
     );

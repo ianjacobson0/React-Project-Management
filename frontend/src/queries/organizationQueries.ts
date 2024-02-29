@@ -1,5 +1,15 @@
 import { gql } from "@apollo/client";
 
+export const QUERY_ORG_BY_ID = gql`
+    query QueryOrgById($id: Int!) {
+        organization(id: $id) {
+            id
+            name
+            description
+        }
+    }
+`
+
 export const CHECK_ORG_BY_USER_ID = gql`
     query CheckOrgByUserId($id: Int!) {
         organizationByUserId(id: $id) {

@@ -33,6 +33,31 @@ export const resolvers = {
                 token: jwt.sign({ id: user.id, expires: expires }, secret!),
                 user: user
             }
+
+            const defaultOrg = await prisma.organization.create({
+                data: {
+                    name: "Organization1",
+                    description: "",
+                    ownerId: user.id
+                }
+            });
+            const orgRole = await prisma.orgRole.create({
+                data: {
+                    name: "owner",
+                    admin: true,
+                    canViewAll: true,
+                    canCreateProject: true,
+                    orgId: defaultOrg.id
+                }
+            });
+            const userMap = await prisma.userOrgMap.create({
+                data: {
+                    orgId: defaultOrg.id,
+                    userId: user.id,
+                    roleId: orgRole.id
+                }
+            });
+
             return response;
         },
         signIn: async (_: any, { input }: { input: SignInInput }): Promise<SignInResponse> => {
