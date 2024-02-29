@@ -1,17 +1,21 @@
 FROM node:alpine
 
+ARG API_ENDPOINT
+
+ARG GRAPHQL_ENDPOINT
+
 RUN mkdir -p /app/pm-frontend
 WORKDIR /app/pm-frontend
 
 COPY . .
 
-ENV REACT_APP_API_ENDPOINT=https://backend-ea443ufhwa-uc.a.run.app
+ENV REACT_APP_API_ENDPOINT=$API_ENDPOINT
 
-ENV REACT_APP_GRAPHQL_ENDPOINT=https://backend-ea443ufhwa-uc.a.run.app/graphql
-
-RUN npm install
+ENV REACT_APP_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
 
 RUN npm run env
+
+RUN npm install
 
 RUN npm run build
 
