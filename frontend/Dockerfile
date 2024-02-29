@@ -5,9 +5,9 @@ WORKDIR /app/pm-frontend
 
 COPY . .
 
-ENV REACT_APP_API_ENDPOINT=$API_ENDPOINT
+ENV REACT_APP_API_ENDPOINT=https://backend-ea443ufhwa-uc.a.run.app
 
-ENV REACT_APP_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
+ENV REACT_APP_GRAPHQL_ENDPOINT=https://backend-ea443ufhwa-uc.a.run.app/graphql
 
 RUN npm install
 
