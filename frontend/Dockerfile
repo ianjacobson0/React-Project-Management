@@ -5,7 +5,13 @@ WORKDIR /app/pm-frontend
 
 COPY . .
 
+ENV REACT_APP_API_ENDPOINT=$API_ENDPOINT
+
+ENV REACT_APP_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
+
 RUN npm install
+
+RUN npm run env
 
 RUN npm run build
 
