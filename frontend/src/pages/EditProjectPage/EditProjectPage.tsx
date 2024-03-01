@@ -48,7 +48,6 @@ const EditProjectPage = () => {
             description: description,
             orgId: orgId
         }
-        console.log(input);
         updateProject({
             variables: {
                 input: input

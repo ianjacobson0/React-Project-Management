@@ -1,10 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TaskState } from "../../types/graphql-types";
 import Column from "../Column/Column";
 import ColumnAdd from "../ColumnAdd/ColumnAdd";
-import StateBox from "../StateBox/StateBox";
-import TaskList from "../TaskList/TaskList";
-import { Button } from "@mui/material";
 
 type Props = {
     projectId: number | null,
@@ -17,6 +16,12 @@ type Props = {
     orgName: string | undefined
 }
 
+export const ContextMenuContext = React.createContext({
+    open: (id: string) => { },
+    close: () => { },
+    currentId: ""
+});
+
 const MainBoard = ({
     projectId,
     taskStates,
@@ -28,6 +33,27 @@ const MainBoard = ({
     orgName
 }: Props) => {
     const navigate = useNavigate();
+    const [openContextMenuId, setOpenContextMenuId] = useState("");
+
+    const openContextMenu = (id: string) => {
+        setOpenContextMenuId(id);
+    }
+
+    const closeContextMenu = () => {
+        setOpenContextMenuId("");
+    }
+
+    const states = React.useMemo(() => {
+        return taskStates.map((state, idx) => {
+            return (
+                <Column
+                    stateObj={state}
+                    loadTaskStates={loadTaskStates}
+                    key={`${state.id}-${idx}-${(new Date())}`}
+                />
+            );
+        });
+    }, [taskStates])
 
     return (
         <div className="board">
@@ -37,17 +63,14 @@ const MainBoard = ({
                     <div className="project-name">{projectName}</div>
                 </div>
             }
-            <div className="columns-container">
-
-                {!isNoProjects && !isLoading && taskStates.map((state, idx) => {
-                    return (
-                        <Column
-                            stateObj={state}
-                            loadTaskStates={loadTaskStates}
-                            key={`${state.id}-${idx}-${(new Date())}`}
-                        />
-                    );
-                })}
+            <div className="columns-container" onScroll={() => openContextMenu("scroll")}>
+                <ContextMenuContext.Provider value={{
+                    open: openContextMenu,
+                    close: closeContextMenu,
+                    currentId: openContextMenuId
+                }}>
+                    {!isNoProjects && !isLoading && states}
+                </ContextMenuContext.Provider>
                 {!isNoProjects && !isLoading && projectId !== 0 && <ColumnAdd createState={createState} />}
                 {!isLoading && isNoProjects &&
                     <div className="main-board-message">
@@ -60,7 +83,7 @@ const MainBoard = ({
                     </div>
                 }
             </div>
-        </div>
+        </div >
     );
 }
 

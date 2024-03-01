@@ -46,7 +46,6 @@ const HomePage = () => {
     }
 
     const changeProject = (id: number) => {
-        console.log(typeof (id));
         setProjectId(id);
         sessionStorage.setItem("projectId", id.toString());
     }
@@ -137,7 +136,6 @@ const HomePage = () => {
 
 
     useEffect(() => {
-        console.log(projects);
         if (projects !== null)
             setIsNoProjects(projects.length == 0);
     }, [projects])

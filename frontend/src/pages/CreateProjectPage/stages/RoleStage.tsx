@@ -58,7 +58,6 @@ const RoleStage = ({ projectId }: { projectId: number }) => {
     }
 
     const editRole = (id: number) => {
-        console.log(id);
         setMode("edit");
         getProjRoleById({ variables: { id: id } })
             .then(({ data }) => {

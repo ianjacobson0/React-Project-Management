@@ -26,7 +26,6 @@ const PrivateRoutes = () => {
                     setIsLoading(false);
                 })
                 .catch(err => {
-                    console.error(err);
                     setIsLoading(false);
                 })
         } else {

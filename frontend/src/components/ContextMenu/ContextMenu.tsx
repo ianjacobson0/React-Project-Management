@@ -6,11 +6,13 @@ type Props = {
 
 const ContextMenu = ({ children, top, left }: Props) => {
     return (
-        <div style={{
-            position: "fixed",
-            top: `${top}px`,
-            left: `${left}px`
-        }}>
+        <div
+            className="context-menu"
+            style={{
+                position: "fixed",
+                top: `${top}px`,
+                left: `${left}px`
+            }}>
             {children}
         </div>
     );

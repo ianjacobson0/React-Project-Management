@@ -54,7 +54,6 @@ const CreateStage = ({
         if (data && data.organizationByUserId) {
             setOrganizations(data.organizationByUserId);
         }
-        console.log(data);
     }, [data])
 
     return (

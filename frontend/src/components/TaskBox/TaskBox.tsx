@@ -1,5 +1,5 @@
 import { ApolloQueryResult, OperationVariables, useApolloClient, useMutation } from "@apollo/client";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { AiFillEdit } from "react-icons/ai";
 import { FaEye, FaX } from "react-icons/fa6";
@@ -10,8 +10,7 @@ import EditTaskDialog from "../EditTaskDialog/EditTaskDialog";
 import EditableTextTaskTitle from "../EditableTextTaskTitle/EditableTextTaskTitle";
 import ViewTaskDialog from "../ViewTaskDialog/ViewTaskDialog";
 import ContextMenuContainer from "../ContextMenuContainer/ContextMenuContainer";
-import { taskMenuData } from "../../menus/menus";
-import { ContextMenuFunctionMap } from "../../types/context-menu-types";
+import { ContextMenuFunctionMap, ContextMenuItem } from "../../types/context-menu-types";
 
 type Props = {
     task: any,
@@ -39,7 +38,6 @@ const TaskBox = ({ task, refetch }: Props) => {
             isDragging: !!monitor.isDragging()
         }),
         canDrag: (monitor) => {
-            console.log(overInput);
             return !overInput;
         }
     }), [task]);
@@ -79,7 +77,6 @@ const TaskBox = ({ task, refetch }: Props) => {
             }
         })
             .then(() => {
-                console.log("done change task order");
                 refetch();
             });
     }
@@ -118,6 +115,16 @@ const TaskBox = ({ task, refetch }: Props) => {
         setViewOpen(false);
     }
 
+    const taskMenuData: ContextMenuItem[] = [
+        {
+            id: 1,
+            title: "Edit"
+        },
+        {
+            id: 2,
+            title: "Delete"
+        },
+    ]
 
 
     const contextMenuFunctions: ContextMenuFunctionMap[] = [
@@ -129,12 +136,14 @@ const TaskBox = ({ task, refetch }: Props) => {
             id: 2,
             action: delete_click
         }
-    ]
+    ];
 
     return (
         <ContextMenuContainer
             items={taskMenuData}
             functionMap={contextMenuFunctions}
+            type="task"
+            id={parseInt(task.id)}
         >
             <div
                 className="box task-box"

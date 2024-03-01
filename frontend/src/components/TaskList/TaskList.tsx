@@ -35,7 +35,7 @@ const TaskList = ({ stateId }: Props) => {
 
     return (
         <>
-            {data.tasks.map((o: any, idx: number) => {
+            {data && data.tasks.map((o: any, idx: number) => {
                 return (<TaskBox task={o} refetch={refetch} key={`${o.taskStateId}-${o.id}-${(new Date()).getTime() + idx}`} />);
             })}
             {!loading &&

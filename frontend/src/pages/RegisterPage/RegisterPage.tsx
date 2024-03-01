@@ -75,7 +75,6 @@ const RegisterPage = () => {
                 }
             })
                 .then(({ data }) => {
-                    console.log(data);
                     if (data.signUp.success) {
                         navigate("/login");
                     } else {
@@ -84,7 +83,6 @@ const RegisterPage = () => {
                             setEmail("");
                             displayError();
                         }
-                        console.log("Here");
                     }
                 })
                 .catch((err) => {
