@@ -33,10 +33,11 @@ const LayoutWithBg = () => {
                     backgroundPosition: "center",
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat"
-                }}>
+                }}
+            >
                 <Outlet />
             </Box>
-        </DndProvider>
+        </DndProvider >
     );
 }
 

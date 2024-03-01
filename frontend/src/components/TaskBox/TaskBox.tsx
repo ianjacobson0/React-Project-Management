@@ -9,6 +9,9 @@ import { CHANGE_TASK_ORDER, CHANGE_TASK_STATE, DELETE_TASK } from "../../queries
 import EditTaskDialog from "../EditTaskDialog/EditTaskDialog";
 import EditableTextTaskTitle from "../EditableTextTaskTitle/EditableTextTaskTitle";
 import ViewTaskDialog from "../ViewTaskDialog/ViewTaskDialog";
+import ContextMenuContainer from "../ContextMenuContainer/ContextMenuContainer";
+import { taskMenuData } from "../../menus/menus";
+import { ContextMenuFunctionMap } from "../../types/context-menu-types";
 
 type Props = {
     task: any,
@@ -115,61 +118,82 @@ const TaskBox = ({ task, refetch }: Props) => {
         setViewOpen(false);
     }
 
-    return (
-        <div
-            className="box task-box"
-            style={{
-                height: descriptionOpen ? "200px" : "25px"
-            }}
-            ref={ref}
-        >
-            <div className="box-title" onClick={(e) => toggleDesription()}>
-                <EditableTextTaskTitle
-                    task={task}
-                    setOverInput={setOverInput}
-                    refetch={refetch}
-                />
-                <RxCaretDown
-                    size={15}
-                    className="box-text"
-                    style={{ cursor: "pointer" }}
-                />
 
-            </div>
+
+    const contextMenuFunctions: ContextMenuFunctionMap[] = [
+        {
+            id: 1,
+            action: () => setEditOpen(true)
+        },
+        {
+            id: 2,
+            action: delete_click
+        }
+    ]
+
+    return (
+        <ContextMenuContainer
+            items={taskMenuData}
+            functionMap={contextMenuFunctions}
+        >
             <div
-                className="box-description"
+                className="box task-box"
                 style={{
-                    height: descriptionOpen ? "200px" : "0px"
+                    height: descriptionOpen ? "200px" : "25px"
+                }}
+                ref={ref}
+                onContextMenu={(e) => {
+                    e.preventDefault();
                 }}
             >
-                <div className="box-content"
-                    style={{ opacity: showContent ? "1.0" : "0.0" }}
+                <div className="box-title" onClick={(e) => toggleDesription()}>
+                    <EditableTextTaskTitle
+                        task={task}
+                        setOverInput={setOverInput}
+                        refetch={refetch}
+                    />
+                    <RxCaretDown
+                        size={15}
+                        className="box-text"
+                        style={{ cursor: "pointer" }}
+                    />
+
+                </div>
+                <div
+                    className="box-description"
+                    style={{
+                        height: descriptionOpen ? "200px" : "0px"
+                    }}
                 >
-                    <div className="text-box description-text">
-                        {(task.description !== "" && task.description)
-                            ? task.description : <i>no description</i>}
-                    </div>
-                    <div className="box-actions">
-                        <FaEye
-                            style={{ cursor: "pointer" }}
-                            onClick={(e) => setViewOpen(true)}
-                        />
-                        <AiFillEdit
-                            style={{ cursor: "pointer" }}
-                            onClick={(e) => setEditOpen(true)}
-                        />
-                        <FaX
-                            style={{ cursor: "pointer" }}
-                            size={15}
-                            color="red"
-                            onClick={(e) => delete_click()}
-                        />
+                    <div className="box-content"
+                        style={{ opacity: showContent ? "1.0" : "0.0" }}
+                    >
+                        <div className="text-box description-text">
+                            {(task.description !== "" && task.description)
+                                ? task.description : <i>no description</i>}
+                        </div>
+                        <div className="box-actions">
+                            <FaEye
+                                style={{ cursor: "pointer" }}
+                                onClick={(e) => setViewOpen(true)}
+                            />
+                            <AiFillEdit
+                                style={{ cursor: "pointer" }}
+                                onClick={(e) => setEditOpen(true)}
+                            />
+                            <FaX
+                                style={{ cursor: "pointer" }}
+                                size={15}
+                                color="red"
+                                onClick={(e) => delete_click()}
+                            />
+                        </div>
                     </div>
                 </div>
+                <EditTaskDialog open={editOpen} task={task} handleClose={handleEditClose} refetch={refetch} />
+                <ViewTaskDialog open={viewOpen} task={task} handleClose={handleViewClose} />
             </div>
-            <EditTaskDialog open={editOpen} task={task} handleClose={handleEditClose} refetch={refetch} />
-            <ViewTaskDialog open={viewOpen} task={task} handleClose={handleViewClose} />
-        </div >
+        </ContextMenuContainer>
     );
 }
 

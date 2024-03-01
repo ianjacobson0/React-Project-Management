@@ -165,6 +165,8 @@ const HomePage = () => {
                     projects={projects}
                 />
                 <MainBoard
+                    projectName={projects?.find(proj => proj.id === projectId)?.title}
+                    orgName={organizations.find(org => org.id == orgId)?.name}
                     projectId={projectId}
                     taskStates={taskStates}
                     loadTaskStates={loadTaskStates}
