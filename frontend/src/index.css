@@ -160,14 +160,18 @@ body {
 
 .org-name {
     color: var(--box-text-color);
+    cursor: pointer;
     font-size: 14px;
+}
+
+.org-name:hover {
+    text-decoration: underline;
 }
 
 .project-name {
     color: var(--header-black-color);
     font-size: 25px;
     cursor: pointer;
-    margin-top: -7px;
 }
 
 .project-name:hover {
@@ -351,4 +355,14 @@ body {
 
 .context-menu>ul>li:hover {
     color: var(--box-text-color);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.form-item {
+    margin-bottom: 5px !important;
 }

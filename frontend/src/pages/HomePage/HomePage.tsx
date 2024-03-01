@@ -171,6 +171,7 @@ const HomePage = () => {
                     createState={createState}
                     isLoading={createStateLoading || projectByOrgLoading || projectLoading || loading}
                     isNoProjects={isNoProjects}
+                    orgId={orgId}
                 />
             </Box >
         </>

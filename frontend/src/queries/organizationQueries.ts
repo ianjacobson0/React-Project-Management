@@ -27,6 +27,14 @@ export const CREATE_ORG = gql`
     }
 `;
 
+export const UPDATE_ORG = gql`
+    mutation UpdateOrganization($input: UpdateOrgInput!) {
+        updateOrg(input: $input) {
+            id
+        }
+    }
+`;
+
 export const ROLES_BY_ORG_ID = gql`
     query RolesByOrgId ($id: Int!) {
         rolesByOrgId(id: $id) {

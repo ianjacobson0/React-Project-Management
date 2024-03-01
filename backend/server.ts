@@ -1,20 +1,20 @@
-import express, { Request, RequestHandler } from "express";
-import { GraphQLParams, OptionsData, graphqlHTTP } from "express-graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { resolvers as userResolvers } from "./graphql/User/userResolvers";
-import { models as userModels } from "./graphql/User/userModels";
-import { resolvers as orgResolvers } from "./graphql/Organization/organizationResolvers";
-import { models as orgModels } from "./graphql/Organization/organizationModels";
-import { resolvers as projectResolvers } from "./graphql/Project/projectResolvers";
-import { models as projectModels } from "./graphql/Project/projectModels";
-import { resolvers as inviteResolvers } from "./graphql/Invite/inviteResolvers";
-import { models as inviteModels } from "./graphql/Invite/inviteModels";
-import jwt from "jsonwebtoken";
-import { getErrorMessage, jwtPayload, verifyRequest } from "./types/types";
-import { bodyParserGraphQL } from "body-parser-graphql";
 import bodyParser from "body-parser";
+import { bodyParserGraphQL } from "body-parser-graphql";
 import cors from "cors";
+import express from "express";
+import { graphqlHTTP } from "express-graphql";
+import jwt from "jsonwebtoken";
 import { merge } from "lodash";
+import { models as inviteModels } from "./graphql/Invite/inviteModels";
+import { resolvers as inviteResolvers } from "./graphql/Invite/inviteResolvers";
+import { models as orgModels } from "./graphql/Organization/organizationModels";
+import { resolvers as orgResolvers } from "./graphql/Organization/organizationResolvers";
+import { models as projectModels } from "./graphql/Project/projectModels";
+import { resolvers as projectResolvers } from "./graphql/Project/projectResolvers";
+import { models as userModels } from "./graphql/User/userModels";
+import { resolvers as userResolvers } from "./graphql/User/userResolvers";
+import { getErrorMessage, jwtPayload, verifyRequest } from "./types/types";
 
 const app: express.Application = express();
 

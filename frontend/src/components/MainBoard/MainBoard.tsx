@@ -13,7 +13,8 @@ type Props = {
     isLoading: boolean,
     isNoProjects: boolean,
     projectName: string | undefined,
-    orgName: string | undefined
+    orgName: string | undefined,
+    orgId: number | null
 }
 
 export const ContextMenuContext = React.createContext({
@@ -30,7 +31,8 @@ const MainBoard = ({
     isLoading,
     isNoProjects,
     projectName,
-    orgName
+    orgName,
+    orgId
 }: Props) => {
     const navigate = useNavigate();
     const [openContextMenuId, setOpenContextMenuId] = useState("");
@@ -59,7 +61,12 @@ const MainBoard = ({
         <div className="board">
             {orgName && projectName &&
                 <div className="header">
-                    <div className="org-name">{orgName}</div>
+                    <div
+                        className="org-name"
+                        onClick={(e) => navigate("/editorganization", {
+                            state: { orgId: orgId }
+                        })}
+                    >{orgName}</div>
                     <div
                         className="project-name"
                         onClick={(e) => navigate("/editproject", { state: { projectId: projectId } })}
