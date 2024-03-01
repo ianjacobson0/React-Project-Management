@@ -160,11 +160,18 @@ body {
 
 .org-name {
     color: var(--box-text-color);
+    font-size: 14px;
 }
 
 .project-name {
     color: var(--header-black-color);
     font-size: 25px;
+    cursor: pointer;
+    margin-top: -7px;
+}
+
+.project-name:hover {
+    text-decoration: underline;
 }
 
 .main-board-message {
@@ -325,6 +332,7 @@ body {
 .context-menu {
     z-index: 100;
     background-color: #E8E8E8;
+    outline: 1px solid var(--header-black-color);
 }
 
 .context-menu>ul {

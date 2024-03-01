@@ -22,7 +22,7 @@ const NavItemOrg = ({ orgs, changeOrg }: Props) => {
             onMouseOver={hover}
             onMouseLeave={endHover}
         >
-            <div className="nav-item-title">Current Organization</div>
+            <div className="nav-item-title">Change Current Organization</div>
             <div className="nav-menu-container" style={style}>
                 <div className="nav-menu-hidden"></div>
                 <div className="nav-menu-visible">

@@ -60,7 +60,10 @@ const MainBoard = ({
             {orgName && projectName &&
                 <div className="header">
                     <div className="org-name">{orgName}</div>
-                    <div className="project-name">{projectName}</div>
+                    <div
+                        className="project-name"
+                        onClick={(e) => navigate("/editproject", { state: { projectId: projectId } })}
+                    >{projectName}</div>
                 </div>
             }
             <div className="columns-container" onScroll={() => openContextMenu("scroll")}>

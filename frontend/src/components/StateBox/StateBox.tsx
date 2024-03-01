@@ -9,6 +9,8 @@ import { CHANGE_STATE_ORDER, DELETE_TASK_STATE } from "../../queries/projectQuer
 import { IsOverInfo } from "../../types/drag-types";
 import { TaskState } from "../../types/graphql-types";
 import EditStateDialog from "../EditStateDialog/EditStateDialog";
+import ContextMenuContainer from "../ContextMenuContainer/ContextMenuContainer";
+import { ContextMenuFunctionMap, ContextMenuItem } from "../../types/context-menu-types";
 
 type Props = {
     state: TaskState,
@@ -32,7 +34,6 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
 
     const [deleteTaskState, { loading: deleteStateLoading }] = useMutation(DELETE_TASK_STATE);
     const [changeOrder, { loading: orderLoading }] = useMutation(CHANGE_STATE_ORDER);
-    const [stateId, setStateId] = useState(0);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -83,13 +84,12 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
         setDialogOpen(false);
     }
 
-    const editState_click = (id: number) => {
-        setStateId(id);
+    const editState_click = () => {
         setDialogOpen(true);
     }
 
-    const deleteState_click = (id: number) => {
-        deleteTaskState({ variables: { id: id } })
+    const deleteState_click = () => {
+        deleteTaskState({ variables: { id: state.id } })
             .then(({ data }) => {
                 loadTaskStates();
             })
@@ -108,6 +108,29 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
         })
     }
 
+
+    const mapFunctions: ContextMenuFunctionMap[] = [
+        {
+            id: 1,
+            action: editState_click
+        },
+        {
+            id: 2,
+            action: deleteState_click
+        }
+    ];
+
+    const mapItems: ContextMenuItem[] = [
+        {
+            id: 1,
+            title: "Edit"
+        },
+        {
+            id: 2,
+            title: "Delete"
+        }
+    ]
+
     useEffect(() => {
         drag(drop(ref));
     }, [ref])
@@ -115,47 +138,55 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
     useEffect(() => {
         setIsDragging(isDragging);
     }, [isDragging])
+
     return (
         <div ref={ref} className="row">
             {((isOver || orderLoading) && isOverInfo?.higherOrder)
                 && <div className="divider"></div>}
-            <div className="box state-box">
-                <div className="box-title">
-                    <p style={{ boxSizing: "border-box" }}>{state.name}</p>
-                    <div className="row">
-                        <AiFillEdit
-                            className="box-text"
-                            style={{ cursor: "pointer" }}
-                            onClick={(e) => editState_click(state.id)}
-                        />
-                        <FaX
-                            className="red"
-                            style={{ cursor: "pointer" }}
-                            size={13}
-                            color="red"
-                            onClick={(e) => deleteState_click(state.id)}
-                        />
+            <ContextMenuContainer
+                items={mapItems}
+                functionMap={mapFunctions}
+                type="statebox"
+                id={state.id}
+            >
+                <div className="box state-box">
+                    <div className="box-title">
+                        <p style={{ boxSizing: "border-box" }}>{state.name}</p>
+                        <div className="row">
+                            <AiFillEdit
+                                className="box-text"
+                                style={{ cursor: "pointer" }}
+                                onClick={(e) => editState_click()}
+                            />
+                            <FaX
+                                className="red"
+                                style={{ cursor: "pointer" }}
+                                size={13}
+                                color="red"
+                                onClick={(e) => deleteState_click()}
+                            />
+                        </div>
+                        {state.complete &&
+                            <Box
+                                sx={{
+                                    position: "absolute",
+                                    backgroundColor: "limegreen",
+                                    width: "5px",
+                                    height: "100%",
+                                    right: "0"
+                                }}
+                            >
+                            </Box>}
                     </div>
-                    {state.complete &&
-                        <Box
-                            sx={{
-                                position: "absolute",
-                                backgroundColor: "limegreen",
-                                width: "5px",
-                                height: "100%",
-                                right: "0"
-                            }}
-                        >
-                        </Box>}
                 </div>
-            </div>
+            </ContextMenuContainer>
             {((isOver || orderLoading) && !isOverInfo?.higherOrder)
                 && <div className="divider"></div>}
             <EditStateDialog
                 open={dialogOpen}
                 handleClose={handleClose}
                 loadTaskStates={loadTaskStates}
-                stateId={stateId}
+                stateId={state.id}
             />
         </div>
     );

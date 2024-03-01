@@ -30,7 +30,7 @@ const NavItemProject = ({ projects, changeProject }: Props) => {
             onMouseOver={hover}
             onMouseLeave={endHover}
         >
-            <div className="nav-item-title" style={{ color: color }}>Current Project</div>
+            <div className="nav-item-title" style={{ color: color }}>Change Current Project</div>
             <div className="nav-menu-container" style={style}>
                 <div className="nav-menu-hidden"></div>
                 <div className="nav-menu-visible">
