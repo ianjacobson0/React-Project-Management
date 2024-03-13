@@ -19,7 +19,7 @@ type Props = {
 
 const TaskBox = ({ task, refetch }: Props) => {
     const client = useApolloClient();
-    const ref = useRef(null);
+    const ref = useRef<HTMLDivElement>(null);
     const [deleteTask, { loading: deleteLoading }] = useMutation(DELETE_TASK);
     const [changeTaskOrder, { loading: orderLoading }] = useMutation(CHANGE_TASK_ORDER);
     const [changeTaskState, { loading: changeStateLoading }] = useMutation(CHANGE_TASK_STATE);
@@ -28,6 +28,7 @@ const TaskBox = ({ task, refetch }: Props) => {
     const [editOpen, setEditOpen] = useState(false);
     const [viewOpen, setViewOpen] = useState(false);
     const [overInput, setOverInput] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
 
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -62,6 +63,12 @@ const TaskBox = ({ task, refetch }: Props) => {
             return stateId === parseInt(task.taskStateId);
         }
     }), [task]);
+
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.setAttribute('draggable', (!isEditing).toString());
+        }
+    }, [isEditing])
 
     useEffect(() => {
         drag(drop(ref));
@@ -160,6 +167,8 @@ const TaskBox = ({ task, refetch }: Props) => {
                         task={task}
                         setOverInput={setOverInput}
                         refetch={refetch}
+                        isEditing={isEditing}
+                        setIsEditing={setIsEditing}
                     />
                     <RxCaretDown
                         size={15}
