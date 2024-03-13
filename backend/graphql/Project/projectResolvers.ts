@@ -439,6 +439,28 @@ export const resolvers = {
         },
         deleteTask: async (_: any, { id }: { id: number }) => {
             return await prisma.task.delete({ where: { id: id } });
+        },
+        deleteProject: async (_: any, { id }: { id: number }) => {
+            const roles = (await prisma.project.findFirst({
+                where: {
+                    id: id
+                },
+                select: {
+                    roles: true
+                }
+            }))?.roles;
+
+            if (roles) {
+                await prisma.projectRole.deleteMany({
+                    where: {
+                        id: { in: roles.map(role => role.id) }
+                    }
+                })
+            }
+
+            await prisma.project.delete({ where: { id: id } });
+
+            return true;
         }
     }
 }

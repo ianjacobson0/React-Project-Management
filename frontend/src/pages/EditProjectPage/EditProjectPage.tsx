@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Box, Button, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { FormEvent, useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { QUERY_PROJECT, UPDATE_PROJECT } from "../../queries/projectQueries";
+import { DELETE_PROJECT, QUERY_PROJECT, UPDATE_PROJECT } from "../../queries/projectQueries";
 import Spinner from "../../components/Spinner/Spinner";
 import { CHECK_ORG_BY_USER_ID } from "../../queries/organizationQueries";
 const EditProjectPage = () => {
@@ -21,6 +21,7 @@ const EditProjectPage = () => {
             id: userId
         }
     });
+    const [deleteProject, { loading: deleteLoading }] = useMutation(DELETE_PROJECT);
     const [updateProject, { loading: updateLoading }] = useMutation(UPDATE_PROJECT);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -122,13 +123,30 @@ const EditProjectPage = () => {
                         return (<MenuItem value={o.id as any}>{o.name}</MenuItem>)
                     })}
                 </Select>
-                <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ display: "block", margin: "auto" }}
-                >
-                    Submit
-                </Button>
+                <div className="row" style={{ marginTop: "10px" }}>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{ display: "block", margin: "auto" }}
+                    >
+                        Submit
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                            deleteProject({
+                                variables: {
+                                    id: projectId
+                                }
+                            }).then(() => {
+                                sessionStorage.removeItem("projectId");
+                                navigate("/");
+                            })
+                        }}
+                    >Delete</Button>
+                </div>
             </Box>
         </Grid >);
 }

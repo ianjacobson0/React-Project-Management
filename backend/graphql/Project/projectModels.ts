@@ -194,5 +194,6 @@ export const models = `
         deleteProjectRole(id: Int!): ProjectRole
         deleteTaskState(id: Int!): TaskState
         deleteTask(id: Int!): Task
+        deleteProject(id: Int!): Boolean
     }
 `

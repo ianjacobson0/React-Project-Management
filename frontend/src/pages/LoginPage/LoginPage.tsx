@@ -68,6 +68,10 @@ const LoginPage = () => {
         navigate("/error", { state: { errorMessage: error.message } });
     }
 
+    if (loading) {
+        return <Spinner />
+    }
+
     return (
         <Grid
             container
@@ -77,7 +81,6 @@ const LoginPage = () => {
             justifyContent="center"
             sx={{ width: "100%", height: "100%" }}
         >
-            {loading && <Spinner />}
             <Box
                 sx={{
                     backgroundColor: "#ffffff",
