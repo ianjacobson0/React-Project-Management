@@ -7,13 +7,14 @@ import { Task, TaskState } from "../../types/graphql-types";
 type Props = {
     task: Task,
     setOverInput: React.Dispatch<React.SetStateAction<boolean>>,
-    refetch: (variables?: Partial<Operation> | undefined) => Promise<ApolloQueryResult<any>>
+    refetch: (variables?: Partial<Operation> | undefined) => Promise<ApolloQueryResult<any>>,
+    setIsEditing: React.Dispatch<React.SetStateAction<boolean>>,
+    isEditing: boolean
 }
 
-const EditableTextTaskTitle = ({ task, setOverInput, refetch }: Props) => {
+const EditableTextTaskTitle = ({ task, setOverInput, refetch, isEditing, setIsEditing }: Props) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [updateTask, { loading }] = useMutation(UPDATE_TASK);
-    const [isEditing, setIsEditing] = useState(false);
     const [value, setValue] = useState(task.name);
 
     const handleClick = (e: React.MouseEvent) => {

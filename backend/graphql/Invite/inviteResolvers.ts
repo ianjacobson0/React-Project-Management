@@ -63,6 +63,44 @@ export const resolvers = {
                     roleId: invite.orgRoleId
                 }
             });
+
+            const role = await prisma.orgRole.findFirst({ where: { id: invite.orgRoleId ?? 0 } });
+
+            if (role && role.canViewAll) {
+                const projects = (await prisma.organization.findFirst({
+                    where: {
+                        id: invite.orgId ?? 0
+                    }, select: {
+                        projects: {
+                            select: {
+                                id: true
+                            }
+                        }
+                    }
+                }))?.projects;
+
+                if (projects) {
+                    projects.map(async proj => {
+                        const roles = (await prisma.project.findFirst({
+                            where: {
+                                id: proj.id
+                            },
+                            select: {
+                                roles: true
+                            }
+                        }))?.roles;
+                        const ownerRole = roles?.find(role => role.admin = true);
+                        await prisma.userProjMap.create({
+                            data: {
+                                projectId: proj.id,
+                                userId: input.userId,
+                                roleId: ownerRole?.id
+                            }
+                        })
+                    });
+                }
+            }
+
             return (map) ?
                 {
                     success: true
