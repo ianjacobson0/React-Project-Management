@@ -5,12 +5,13 @@ import { AiFillEdit } from "react-icons/ai";
 import { FaEye, FaX } from "react-icons/fa6";
 import { RxCaretDown } from "react-icons/rx";
 import { ItemTypes } from "../../constants/constants";
-import { CHANGE_TASK_ORDER, CHANGE_TASK_STATE, DELETE_TASK } from "../../queries/taskQueries";
+import { CHANGE_TASK_ORDER, CHANGE_TASK_STATE, DELETE_TASK, UPDATE_TASK } from "../../queries/taskQueries";
 import EditTaskDialog from "../EditTaskDialog/EditTaskDialog";
 import EditableTextTaskTitle from "../EditableTextTaskTitle/EditableTextTaskTitle";
 import ViewTaskDialog from "../ViewTaskDialog/ViewTaskDialog";
 import ContextMenuContainer from "../ContextMenuContainer/ContextMenuContainer";
 import { ContextMenuFunctionMap, ContextMenuItem } from "../../types/context-menu-types";
+import EditableTextBox from "../EditableTextBox/EditableTextBox";
 
 type Props = {
     task: any,
@@ -23,11 +24,12 @@ const TaskBox = ({ task, refetch }: Props) => {
     const [deleteTask, { loading: deleteLoading }] = useMutation(DELETE_TASK);
     const [changeTaskOrder, { loading: orderLoading }] = useMutation(CHANGE_TASK_ORDER);
     const [changeTaskState, { loading: changeStateLoading }] = useMutation(CHANGE_TASK_STATE);
+    const [updateTask, { loading: updateLoading }] = useMutation(UPDATE_TASK);
+
     const [descriptionOpen, setDescriptionOpen] = useState(false);
     const [showContent, setShowContent] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [viewOpen, setViewOpen] = useState(false);
-    const [overInput, setOverInput] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
 
@@ -39,7 +41,7 @@ const TaskBox = ({ task, refetch }: Props) => {
             isDragging: !!monitor.isDragging()
         }),
         canDrag: (monitor) => {
-            return !overInput;
+            return !isEditing;
         }
     }), [task]);
 
@@ -122,6 +124,18 @@ const TaskBox = ({ task, refetch }: Props) => {
         setViewOpen(false);
     }
 
+    const changeTaskName = (name: string) => {
+        updateTask({
+            variables: {
+                input: {
+                    id: parseInt(task.id),
+                    name: name,
+                    description: task.description ?? ""
+                }
+            }
+        }).then(() => refetch());
+    }
+
     const taskMenuData: ContextMenuItem[] = [
         {
             id: 1,
@@ -163,12 +177,11 @@ const TaskBox = ({ task, refetch }: Props) => {
                 }}
             >
                 <div className="box-title" onClick={(e) => toggleDesription()}>
-                    <EditableTextTaskTitle
-                        task={task}
-                        setOverInput={setOverInput}
-                        refetch={refetch}
+                    <EditableTextBox
+                        defaultValue={task.name ?? ""}
                         isEditing={isEditing}
                         setIsEditing={setIsEditing}
+                        update={changeTaskName}
                     />
                     <RxCaretDown
                         size={15}

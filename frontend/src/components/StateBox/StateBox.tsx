@@ -5,12 +5,13 @@ import { useDrag, useDrop } from "react-dnd";
 import { AiFillEdit } from "react-icons/ai";
 import { FaX } from "react-icons/fa6";
 import { ItemTypes } from "../../constants/constants";
-import { CHANGE_STATE_ORDER, DELETE_TASK_STATE } from "../../queries/projectQueries";
+import { CHANGE_STATE_ORDER, DELETE_TASK_STATE, UPDATE_TASK_STATE } from "../../queries/projectQueries";
 import { IsOverInfo } from "../../types/drag-types";
 import { TaskState } from "../../types/graphql-types";
 import EditStateDialog from "../EditStateDialog/EditStateDialog";
 import ContextMenuContainer from "../ContextMenuContainer/ContextMenuContainer";
 import { ContextMenuFunctionMap, ContextMenuItem } from "../../types/context-menu-types";
+import EditableTextBox from "../EditableTextBox/EditableTextBox";
 
 type Props = {
     state: TaskState,
@@ -23,18 +24,22 @@ type Props = {
 
 const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragging, setIsChanging }: Props) => {
     const ref = useRef(null);
+
+    const [deleteTaskState, { loading: deleteStateLoading }] = useMutation(DELETE_TASK_STATE);
+    const [changeOrder, { loading: orderLoading }] = useMutation(CHANGE_STATE_ORDER);
+    const [updateState, { loading: updateLoading }] = useMutation(UPDATE_TASK_STATE);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
     const [{ isDragging }, drag] = useDrag(() => ({
         type: ItemTypes.STATE,
         item: { id: state.id, order: state.order },
         collect: (monitor) => ({
             item: monitor.getItem(),
             isDragging: !!monitor.isDragging()
-        })
+        }),
+        canDrag: () => !isEditing
     }), [state]);
-
-    const [deleteTaskState, { loading: deleteStateLoading }] = useMutation(DELETE_TASK_STATE);
-    const [changeOrder, { loading: orderLoading }] = useMutation(CHANGE_STATE_ORDER);
-    const [dialogOpen, setDialogOpen] = useState(false);
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.STATE,
@@ -86,6 +91,18 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
 
     const editState_click = () => {
         setDialogOpen(true);
+    }
+
+    const changeStateName = (name: string) => {
+        updateState({
+            variables: {
+                input: {
+                    id: state.id,
+                    name: name,
+                    complete: state.complete
+                }
+            }
+        }).then(() => loadTaskStates());
     }
 
     const deleteState_click = () => {
@@ -151,7 +168,12 @@ const StateBox = ({ state, loadTaskStates, isOverInfo, setIsOverInfo, setIsDragg
             >
                 <div className="box state-box">
                     <div className="box-title">
-                        <p style={{ boxSizing: "border-box" }}>{state.name}</p>
+                        <EditableTextBox
+                            defaultValue={state.name ?? ""}
+                            isEditing={isEditing}
+                            setIsEditing={setIsEditing}
+                            update={changeStateName}
+                        />
                         <div className="row">
                             <AiFillEdit
                                 className="box-text"
