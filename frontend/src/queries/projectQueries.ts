@@ -48,6 +48,12 @@ export const CREATE_PROJECT_ROLE = gql`
     }
 `;
 
+export const DELETE_PROJECT = gql`
+    mutation DeleteProject($id: Int!) {
+        deleteProject(id: $id)
+    }
+`;
+
 export const QUERY_PROJECT_ROLE_BY_ID = gql`
     query ProjectRoleById($id: Int!) {
         projectRole(id: $id) {

@@ -102,6 +102,10 @@ const RegisterPage = () => {
         navigate("/error", { state: { errorMessage: error.message } });
     }
 
+    if (loading) {
+        return <Spinner />
+    }
+
     return (
         <Grid
             container
@@ -111,7 +115,6 @@ const RegisterPage = () => {
             justifyContent="center"
             sx={{ width: "100%", height: "100%" }}
         >
-            {loading && <Spinner />}
             <Box sx={{
                 backgroundColor: "#ffffff",
                 padding: "20px",

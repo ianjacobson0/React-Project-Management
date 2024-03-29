@@ -128,9 +128,11 @@ const RoleStage = ({ orgId }: { orgId: number }) => {
     if (error) {
         navigate("/error", { state: { errorMessage: error.message } });
     }
+    if (loading || createLoading || deleteLoading || roleLoading || updateLoading) {
+        return <Spinner />
+    }
     return (
         <>
-            {(loading || createLoading || deleteLoading || roleLoading || updateLoading) && <Spinner />}
             <Box
                 display="flex"
                 flexDirection="column"

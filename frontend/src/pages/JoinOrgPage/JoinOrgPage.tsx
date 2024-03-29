@@ -45,6 +45,10 @@ const JoinOrgPage = () => {
         }, 3000)
     }
 
+    if (loading) {
+        return <Spinner />
+    }
+
     return (
         <Grid
             container
@@ -54,7 +58,6 @@ const JoinOrgPage = () => {
             justifyContent="center"
             sx={{ width: "100%", height: "100%" }}
         >
-            {loading && <Spinner />}
             <Box
                 component="form"
                 onSubmit={handleSubmit}

@@ -30,7 +30,7 @@ const TaskList = ({ stateId }: Props) => {
     }
 
     if (loading) {
-        return <Spinner />
+        return <></>
     }
 
     return (

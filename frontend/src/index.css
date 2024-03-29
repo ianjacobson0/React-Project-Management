@@ -326,6 +326,7 @@ body {
     border: none;
     text-overflow: ellipsis;
     cursor: auto;
+    background-color: transparent;
 }
 
 .editable-text>input:focus {

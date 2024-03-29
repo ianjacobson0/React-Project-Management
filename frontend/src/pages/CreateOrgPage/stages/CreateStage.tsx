@@ -44,9 +44,12 @@ const CreateStage = (
         }
     }
 
+    if (loading) {
+        return <Spinner />
+    }
+
     return (
         <>
-            {loading && <Spinner />}
             <Box
                 component="form"
                 onSubmit={handleSubmit}

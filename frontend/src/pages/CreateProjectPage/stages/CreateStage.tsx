@@ -56,6 +56,10 @@ const CreateStage = ({
         }
     }, [data])
 
+    if (loading) {
+        return <Spinner />
+    }
+
     return (
         <Box
             component="form"
@@ -66,7 +70,6 @@ const CreateStage = ({
             alignItems="center"
             maxHeight="600px"
         >
-            {loading && <Spinner />}
             <Typography variant="h4" component="h4">Create a Project</Typography>
             <Box sx={{ marginTop: "10px", marginBottom: "10px" }}>
                 <InputLabel>Name:</InputLabel>
